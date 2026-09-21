@@ -223,3 +223,17 @@ body.editing .item{outline:1px dashed var(--accent);outline-offset:-1px}
 .ed-gi img{width:76px;height:76px;border-radius:6px}
 .ed-gi .ed-caps{margin-top:0}
 .ed-gi button{top:8px;right:8px}
+
+/* zona de arrastar e largar */
+.ed-drop{display:grid;gap:4px;justify-items:center;text-align:center;padding:26px 18px;border:1.5px dashed var(--line);border-radius:14px;color:var(--muted);cursor:pointer;transition:.2s}
+.ed-drop strong{color:var(--text);font:500 1rem var(--f-head)}
+.ed-drop span{font-size:.85rem}
+.ed-drop small{font-size:.75rem;max-width:42ch;line-height:1.5;opacity:.85}
+.ed-drop:hover,.ed-drop:focus-visible{border-color:var(--accent);outline:none}
+.ed-dlg.dragging{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.ed-dlg.dragging .ed-drop{border-color:var(--accent);background:rgba(201,164,106,.08);color:var(--text)}
+.ed-chips{display:grid;gap:6px}
+.ed-chips:empty{display:none}
+.ed-chip{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;font-size:.82rem}
+.ed-chip button{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.85rem}
+.ed-chip button:hover{color:#e5484d}

@@ -5,6 +5,8 @@
   var L = {
     pt: {
       lockT: 'Área reservada', lockPw: 'Palavra-passe', lockGo: 'Entrar', lockBad: 'Palavra-passe errada.', lockNo: 'Este navegador não suporta a verificação. Abra o site por https://.',
+      drop: 'Arraste imagens ou vídeos para aqui', dropOr: 'ou clique para escolher os ficheiros', dropNote: 'A primeira imagem passa a ser a capa. Vídeos: MP4 ou WebM até 25 MB (ou cole um link do YouTube/Vimeo em baixo).',
+      vidBig: 'Vídeo demasiado grande (máx. 25 MB). Publique-o no YouTube ou Vimeo e cole o link.', vidNote: 'Os vídeos do computador só são guardados ao clicar em «Publicar». Não feche a página antes.', vidLost: 'Alguns vídeos carregados do computador perderam-se (a página foi fechada antes de publicar) e foram retirados.', coverLbl: 'Capa', galLbl: 'Imagens', vidsLbl: 'Vídeos',
       more: 'Mais imagens (galeria)', addMore: 'Adicionar imagens', capPt: 'Legenda (PT)', capEn: 'Legenda (EN)',
       vids: 'Vídeos (um link por linha)', vidsPh: 'Link do YouTube, Vimeo ou ficheiro .mp4', vidsBad: 'Link de vídeo não reconhecido. Use YouTube, Vimeo ou um endereço terminado em .mp4/.webm:',
       mode: 'Modo de edição', add: '+ Novo projeto', pub: 'Publicar', reset: 'Descartar alterações', exit: 'Sair',
@@ -25,6 +27,8 @@
     },
     en: {
       lockT: 'Private area', lockPw: 'Password', lockGo: 'Enter', lockBad: 'Wrong password.', lockNo: 'This browser cannot verify the password. Open the site over https://.',
+      drop: 'Drag images or videos here', dropOr: 'or click to choose files', dropNote: 'The first image becomes the cover. Videos: MP4 or WebM up to 25 MB (or paste a YouTube/Vimeo link below).',
+      vidBig: 'Video too large (max 25 MB). Upload it to YouTube or Vimeo and paste the link.', vidNote: 'Videos from your computer are only saved when you click "Publish". Do not close the page before.', vidLost: 'Some videos uploaded from your computer were lost (the page was closed before publishing) and were removed.', coverLbl: 'Cover', galLbl: 'Images', vidsLbl: 'Videos',
       more: 'More images (gallery)', addMore: 'Add images', capPt: 'Caption (PT)', capEn: 'Caption (EN)',
       vids: 'Videos (one link per line)', vidsPh: 'YouTube, Vimeo or .mp4 file link', vidsBad: 'Video link not recognised. Use YouTube, Vimeo or an address ending in .mp4/.webm:',
       mode: 'Edit mode', add: '+ New project', pub: 'Publish', reset: 'Discard changes', exit: 'Exit',
@@ -96,29 +100,47 @@
     form.appendChild(field('url', h('input', { name: 'url', maxlength: '500', autocomplete: 'off' })));
 
     // imagem
-    var file = h('input', { type: 'file', accept: 'image/*', hidden: '' });
+    var zoneInput = h('input', { type: 'file', accept: 'image/*,video/mp4,video/webm,.mp4,.webm', multiple: '', hidden: '' });
+    var zone = h('div', { class: 'ed-drop', tabindex: '0', role: 'button' }, [
+      h('strong', { 'data-k': 'drop' }), h('span', { 'data-k': 'dropOr' }), h('small', { 'data-k': 'dropNote' }), zoneInput]);
+    zone.addEventListener('click', function () { zoneInput.click(); });
+    zone.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); zoneInput.click(); } });
+    zoneInput.addEventListener('click', function (e) { e.stopPropagation(); });
+    zoneInput.addEventListener('change', function () { handleFiles(zoneInput.files); zoneInput.value = ''; });
+    form.appendChild(zone);
+
     var prev = h('div', { class: 'ed-prev' });
     var row = h('div', { class: 'ed-row' });
-    row.appendChild(btn('ed-btn', 'upload', function () { file.click(); }));
     row.appendChild(btn('ed-btn', 'remove', function () { st.img = ''; refreshImg(); }));
     var path = h('input', { name: 'imgPath', maxlength: '500', autocomplete: 'off' });
     path.addEventListener('input', function () { st.img = path.value.trim(); refreshPreview(); });
     var coverCap = capInputs(function () { return st.imgCap; });
     dlg._coverCap = coverCap;
-    var imgBox = h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'img' }), prev, row, file, field('imgPath', path), coverCap]);
+    var imgBox = h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'coverLbl' }), prev, row, field('imgPath', path), coverCap]);
     form.appendChild(imgBox);
-    file.addEventListener('change', function () { if (file.files[0]) readImage(file.files[0]); file.value = ''; });
 
     // galeria: várias imagens
     var gal = h('div', { class: 'ed-gal' });
-    var gfile = h('input', { type: 'file', accept: 'image/*', multiple: '', hidden: '' });
-    gfile.addEventListener('change', function () {
-      var fs = Array.prototype.slice.call(gfile.files); gfile.value = '';
-      Promise.all(fs.map(compress)).then(function (ds) { ds.forEach(function (d) { if (d) st.imgs.push({ src: d, cap: {} }); }); refreshGallery(); });
-    });
-    form.appendChild(h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'more' }), gal, h('div', { class: 'ed-row' }, [btn('ed-btn', 'addMore', function () { gfile.click(); })]), gfile]));
+    form.appendChild(h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'galLbl' }), gal]));
     dlg._gal = gal;
+
+    // vídeos: ficheiros largados (lista) + links (uma por linha)
+    var vchips = h('div', { class: 'ed-chips' });
+    dlg._vchips = vchips;
+    form.appendChild(h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'vidsLbl' }), vchips, h('p', { class: 'ed-help', 'data-k': 'vidNote', hidden: '' })]));
     form.appendChild(field('vids', h('textarea', { name: 'vids', rows: '3', maxlength: '1000', autocomplete: 'off' })));
+
+    // arrastar e largar em qualquer ponto do formulário
+    var over = 0;
+    dlg.addEventListener('dragenter', function (e) { e.preventDefault(); over++; dlg.classList.add('dragging'); });
+    dlg.addEventListener('dragover', function (e) { e.preventDefault(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'; });
+    dlg.addEventListener('dragleave', function () { if (--over <= 0) { over = 0; dlg.classList.remove('dragging'); } });
+    dlg.addEventListener('drop', function (e) {
+      e.preventDefault(); over = 0; dlg.classList.remove('dragging');
+      var dt = e.dataTransfer; if (!dt) return;
+      if (dt.files && dt.files.length) { handleFiles(dt.files); return; }
+      handleText(dt.getData('text/uri-list') || dt.getData('text/plain'));
+    });
 
     // cores
     var sw = h('div', { class: 'ed-sw' });
@@ -156,6 +178,47 @@
     dlg._path.value = /^data:/.test(st.img) ? '' : st.img;
     dlg._path.placeholder = /^data:/.test(st.img) ? s('imgLoaded') : 'img/projeto.jpg';
     refreshPreview();
+  }
+
+  /* ---------- arrastar e largar ---------- */
+  var MAX_VIDEO = 25 * 1024 * 1024, pendingFiles = {}, pendN = 0; // vídeos do computador ficam em memória até «Publicar»
+
+  function handleFiles(files) {
+    var imgs = [];
+    Array.prototype.forEach.call(files, function (f) {
+      if (/^image\//.test(f.type)) imgs.push(f);
+      else if (/\.(mp4|webm)$/i.test(f.name)) {
+        if (f.size > MAX_VIDEO) { alert(s('vidBig')); return; }
+        var id = 'v' + Date.now().toString(36) + (pendN++);
+        pendingFiles[id] = f; st.pend.push({ id: id, name: f.name, size: f.size });
+      }
+    });
+    refreshVids();
+    Promise.all(imgs.map(compress)).then(function (ds) {
+      ds.forEach(function (d) { if (!d) return; if (!st.img) st.img = d; else st.imgs.push({ src: d, cap: {} }); });
+      refreshImg(); refreshGallery();
+    });
+  }
+
+  // links largados a partir de outro separador: vídeo → lista de links; imagem → capa/galeria
+  function handleText(txt) {
+    (txt || '').split(/\r?\n/).map(function (x) { return x.trim(); }).filter(function (x) { return x && x[0] !== '#'; }).forEach(function (u) {
+      if (Portfolio.videoInfo(u)) { var v = form.elements.vids; v.value = (v.value.trim() ? v.value.trim() + '\n' : '') + u; }
+      else if (/^https?:\/\/.+\.(png|jpe?g|webp|gif|svg)([?#].*)?$/i.test(u)) { if (!st.img) st.img = u; else st.imgs.push({ src: u, cap: {} }); }
+    });
+    refreshImg(); refreshGallery();
+  }
+
+  function refreshVids() {
+    var box = dlg._vchips; box.textContent = '';
+    st.pend.forEach(function (v, i) {
+      var c = h('span', { class: 'ed-chip' });
+      c.appendChild(h('span', { text: '▶ ' + v.name + ' · ' + (v.size / 1048576).toFixed(1) + ' MB' }));
+      var x = h('button', { type: 'button', 'aria-label': 'Remover', text: '✕' });
+      x.addEventListener('click', function () { delete pendingFiles[v.id]; st.pend.splice(i, 1); refreshVids(); });
+      c.appendChild(x); box.appendChild(c);
+    });
+    dlg.querySelector('[data-k=vidNote]').hidden = !st.pend.length;
   }
 
   // redimensiona para no máximo 1400px e comprime (o navegador guarda pouco espaço)
@@ -211,6 +274,7 @@
     st = {
       grad: cur ? cur.grad || 1 : 1, img: cur ? cur.img || '' : '',
       imgCap: cur && cur.imgCap ? JSON.parse(JSON.stringify(cur.imgCap)) : {},
+      pend: [], lost: false,
       imgs: cur && cur.imgs ? cur.imgs.map(function (x) { return typeof x === 'string' ? { src: x, cap: {} } : { src: x.src, cap: Object.assign({}, x.cap) }; }) : []
     };
     var f = form.elements;
@@ -219,12 +283,21 @@
     f.dPt.value = cur && cur.desc ? cur.desc.pt || '' : '';
     f.dEn.value = cur && cur.desc ? cur.desc.en || '' : '';
     f.url.value = cur ? cur.url || '' : '';
-    f.vids.value = cur && cur.videos ? cur.videos.join('\n') : '';
+    f.vids.value = cur && cur.videos ? cur.videos.filter(function (u) { return !/^pending:/.test(u); }).join('\n') : '';
     form.querySelector('.ed-err').hidden = true;
     labels();
+    // vídeos já largados mas ainda por publicar (só existem em memória)
+    if (cur && cur.videos) cur.videos.forEach(function (u) {
+      var m = /^pending:(\w+)$/.exec(u);
+      if (!m) return;
+      var pf = pendingFiles[m[1]];
+      if (pf) st.pend.push({ id: m[1], name: pf.name, size: pf.size }); else st.lost = true;
+    });
+    if (st.lost) alert(s('vidLost'));
     refreshImg();
     fillCaps(dlg._coverCap, st.imgCap);
     refreshGallery();
+    refreshVids();
     dlg.showModal();
     f.title.focus();
   }
@@ -240,7 +313,7 @@
     if (bad.length) { err.textContent = s('vidsBad') + ' ' + bad[0]; err.hidden = false; f.vids.focus(); return; }
     var p = {
       id: cur ? cur.id : 'p-' + Date.now().toString(36),
-      cat: f.cat.value, title: f.title.value.trim(), grad: st.grad, img: st.img, imgCap: capOrUndef(st.imgCap), imgs: st.imgs.map(function (it) { return capOrUndef(it.cap) ? { src: it.src, cap: capOrUndef(it.cap) } : it.src; }), videos: vids, url: f.url.value.trim(),
+      cat: f.cat.value, title: f.title.value.trim(), grad: st.grad, img: st.img, imgCap: capOrUndef(st.imgCap), imgs: st.imgs.map(function (it) { return capOrUndef(it.cap) ? { src: it.src, cap: capOrUndef(it.cap) } : it.src; }), videos: vids.concat(st.pend.map(function (v) { return 'pending:' + v.id; })), url: f.url.value.trim(),
       desc: { pt: f.dPt.value.trim(), en: f.dEn.value.trim() }
     };
     var ok = Portfolio.upsert(p);
@@ -298,6 +371,27 @@
     return name;
   }
 
+  function fileB64(f) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(String(r.result).split(',')[1]); };
+      r.onerror = reject; r.readAsDataURL(f);
+    });
+  }
+  // 'pending:id' → grava o ficheiro em videos/ e devolve o caminho; se o ficheiro já não existe, devolve ''
+  async function uploadVideo(ref, p, token) {
+    var m = /^pending:(\w+)$/.exec(ref);
+    if (!m) return ref;
+    var f = pendingFiles[m[1]];
+    if (!f) return '';
+    var safe = f.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-');
+    var name = 'videos/' + p.id + '-' + m[1] + '-' + safe;
+    var up = await gh('PUT', name, { message: 'Vídeo: ' + (p.title || p.id), content: await fileB64(f), branch: BRANCH }, token);
+    if (!up.ok) throw up;
+    delete pendingFiles[m[1]];
+    return name;
+  }
+
   async function publish(button) {
     var token = getToken();
     if (!token) { token = await askToken(); if (!token) return; setToken(token); }
@@ -309,6 +403,7 @@
       for (var i = 0; i < list.length; i++) {
         var p = list[i];
         p.img = await uploadData(p.img, p, token);
+        if (p.videos) { var vs = []; for (var k = 0; k < p.videos.length; k++) { var vv = await uploadVideo(p.videos[k], p, token); if (vv) vs.push(vv); } p.videos = vs; }
         for (var j = 0; p.imgs && j < p.imgs.length; j++) {
           if (typeof p.imgs[j] === 'string') p.imgs[j] = await uploadData(p.imgs[j], p, token);
           else p.imgs[j].src = await uploadData(p.imgs[j].src, p, token);
@@ -353,6 +448,9 @@
   }
 
   document.addEventListener('langchange', function () { if (on) labels(); });
+  // em modo de edição, um ficheiro largado fora do formulário não deve abrir-se no navegador
+  addEventListener('dragover', function (e) { if (on) e.preventDefault(); });
+  addEventListener('drop', function (e) { if (on) e.preventDefault(); });
 
   /* ---------- palavra-passe ---------- */
   // Guardamos apenas o hash (PBKDF2-SHA256); a palavra-passe em si não está no código.
