@@ -5,27 +5,37 @@
   var L = {
     pt: {
       lockT: 'Área reservada', lockPw: 'Palavra-passe', lockGo: 'Entrar', lockBad: 'Palavra-passe errada.', lockNo: 'Este navegador não suporta a verificação. Abra o site por https://.',
-      mode: 'Modo de edição', add: '+ Novo projeto', exp: 'Exportar', imp: 'Importar', reset: 'Repor original', exit: 'Sair',
-      hint: 'As alterações ficam guardadas neste navegador. Use «Exportar» para as publicar.',
+      mode: 'Modo de edição', add: '+ Novo projeto', pub: 'Publicar', reset: 'Descartar alterações', exit: 'Sair',
+      hint: 'As alterações só aparecem no site depois de clicar em «Publicar».',
+      pubBusy: 'A publicar…', pubOk: 'Publicado! O site mostra as alterações dentro de alguns minutos.',
+      pubAuth: 'O GitHub recusou a chave. Clique em Publicar e cole uma chave nova.', pubErr: 'Não foi possível publicar. Verifique a ligação e tente outra vez.',
+      tokT: 'Ligar ao GitHub (só uma vez)', tokGo: 'Guardar chave',
+      tokHelp: 'Para publicar, o editor precisa de uma chave do GitHub. Crie-a assim:',
+      tok1: '1. Abra o link abaixo e escolha um nome (ex.: Arkeido).', tok2: '2. Em «Repository access» escolha «Only select repositories» → ArkeidoSite.', tok3: '3. Em «Permissions → Repository» ponha «Contents» em «Read and write».', tok4: '4. Clique em «Generate token», copie a chave e cole-a aqui. Fica guardada só neste navegador.',
       newT: 'Novo projeto', editT: 'Editar projeto', title: 'Título', cat: 'Categoria', dPt: 'Descrição (PT)', dEn: 'Descrição (EN)',
       url: 'Ligação (opcional)', urlPh: 'https://… ou demos/site/index.html', img: 'Imagem', upload: 'Carregar imagem', remove: 'Remover',
       imgPath: 'ou caminho/URL da imagem', imgLoaded: '(imagem carregada)', color: 'Cor de fundo (sem imagem)',
       save: 'Guardar', cancel: 'Cancelar', needTitle: 'Indique um título.',
       quota: 'Guardado apenas até ao fecho da página: o navegador ficou sem espaço. Use uma imagem mais pequena ou um caminho (img/…).',
-      resetQ: 'Repor os projetos originais? As suas alterações neste navegador serão perdidas.',
+      resetQ: 'Descartar as alterações por publicar e voltar ao que está no site?',
       impQ: 'Substituir todos os projetos pelos do ficheiro?', impBad: 'Ficheiro inválido.',
       expDone: 'Ficheiro projects.js descarregado. Substitua js/projects.js do site por ele para publicar.'
     },
     en: {
       lockT: 'Private area', lockPw: 'Password', lockGo: 'Enter', lockBad: 'Wrong password.', lockNo: 'This browser cannot verify the password. Open the site over https://.',
-      mode: 'Edit mode', add: '+ New project', exp: 'Export', imp: 'Import', reset: 'Restore original', exit: 'Exit',
-      hint: 'Changes are saved in this browser. Use "Export" to publish them.',
+      mode: 'Edit mode', add: '+ New project', pub: 'Publish', reset: 'Discard changes', exit: 'Exit',
+      hint: 'Changes only show on the site after you click "Publish".',
+      pubBusy: 'Publishing…', pubOk: 'Published! The site shows the changes within a few minutes.',
+      pubAuth: 'GitHub rejected the key. Click Publish and paste a new one.', pubErr: 'Could not publish. Check your connection and try again.',
+      tokT: 'Connect to GitHub (one time only)', tokGo: 'Save key',
+      tokHelp: 'To publish, the editor needs a GitHub key. Create it like this:',
+      tok1: '1. Open the link below and choose a name (e.g. Arkeido).', tok2: '2. Under "Repository access" pick "Only select repositories" → ArkeidoSite.', tok3: '3. Under "Permissions → Repository" set "Contents" to "Read and write".', tok4: '4. Click "Generate token", copy the key and paste it here. It is stored only in this browser.',
       newT: 'New project', editT: 'Edit project', title: 'Title', cat: 'Category', dPt: 'Description (PT)', dEn: 'Description (EN)',
       url: 'Link (optional)', urlPh: 'https://… or demos/site/index.html', img: 'Image', upload: 'Upload image', remove: 'Remove',
       imgPath: 'or image path/URL', imgLoaded: '(image uploaded)', color: 'Background colour (no image)',
       save: 'Save', cancel: 'Cancel', needTitle: 'Please enter a title.',
       quota: 'Saved for this page view only: the browser ran out of space. Use a smaller image or a path (img/…).',
-      resetQ: 'Restore the original projects? Your changes in this browser will be lost.',
+      resetQ: 'Discard unpublished changes and go back to what is on the site?',
       impQ: 'Replace all projects with those in the file?', impBad: 'Invalid file.',
       expDone: 'projects.js downloaded. Replace the site\'s js/projects.js with it to publish.'
     }
@@ -54,17 +64,13 @@
   function buildBar() {
     bar = h('div', { class: 'ed-bar', role: 'toolbar' });
     bar.appendChild(h('strong', { 'data-k': 'mode' }));
-    bar.appendChild(btn('ed-btn primary', 'add', function () { openForm(null); }));
-    bar.appendChild(btn('ed-btn', 'exp', exportFile));
-    bar.appendChild(btn('ed-btn', 'imp', function () { picker.click(); }));
+    bar.appendChild(btn('ed-btn', 'add', function () { openForm(null); }));
+    bar.appendChild(btn('ed-btn primary', 'pub', function () { publish(this); }));
     bar.appendChild(btn('ed-btn', 'reset', function () { if (confirm(s('resetQ'))) Portfolio.reset(); }));
     bar.appendChild(btn('ed-btn', 'exit', function () { toggle(false); }));
     bar.appendChild(h('span', { class: 'ed-hint', 'data-k': 'hint' }));
     document.body.appendChild(bar);
 
-    var picker = h('input', { type: 'file', accept: '.js,.json,application/json,text/javascript', hidden: '' });
-    picker.addEventListener('change', function () { importFile(picker.files[0]); picker.value = ''; });
-    bar.appendChild(picker);
   }
 
   /* ---------- formulário ---------- */
@@ -182,36 +188,72 @@
     if (!ok) alert(s('quota'));
   }
 
-  /* ---------- exportar / importar ---------- */
-  function exportFile() {
-    var src = '/* Projetos do portfólio — gerado pelo modo de edição em ' + new Date().toISOString().slice(0, 10) + '.\n   Substitua js/projects.js por este ficheiro. */\nwindow.PROJECTS = ' +
-      JSON.stringify(Portfolio.get(), null, 2) + ';\n';
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
-    a.download = 'projects.js';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-    alert(s('expDone'));
+  /* ---------- publicar (grava no GitHub; o site atualiza sozinho) ---------- */
+  var REPO = 'creotocrata/ArkeidoSite', BRANCH = 'main', API = 'https://api.github.com/repos/' + REPO + '/contents/';
+
+  function getToken() { try { return localStorage.getItem('arkeido.gh') || ''; } catch (e) { return ''; } }
+  function setToken(v) { try { v ? localStorage.setItem('arkeido.gh', v) : localStorage.removeItem('arkeido.gh'); } catch (e) {} }
+
+  function gh(method, path, body, token) {
+    return fetch(API + path + (method === 'GET' ? '?ref=' + BRANCH : ''), {
+      method: method,
+      headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' },
+      body: body ? JSON.stringify(body) : undefined
+    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, json: j }; }); });
+  }
+  function b64utf8(t) { return btoa(unescape(encodeURIComponent(t))); }
+
+  function askToken() {
+    return new Promise(function (resolve) {
+      var d = h('dialog', { class: 'ed-dlg' });
+      var f = h('form', { method: 'dialog' });
+      f.appendChild(h('h3', { text: s('tokT') }));
+      f.appendChild(h('p', { class: 'ed-help', text: s('tokHelp') }));
+      ['tok1', 'tok2', 'tok3'].forEach(function (k) { f.appendChild(h('p', { class: 'ed-help', text: s(k) })); });
+      f.appendChild(h('a', { href: 'https://github.com/settings/personal-access-tokens/new', target: '_blank', rel: 'noopener', class: 'ed-link', text: 'github.com/settings/personal-access-tokens/new' }));
+      f.appendChild(h('p', { class: 'ed-help', text: s('tok4') }));
+      var inp = h('input', { type: 'password', autocomplete: 'off', 'aria-label': 'token' });
+      f.appendChild(inp);
+      var cancel = h('button', { type: 'button', class: 'ed-btn', text: s('cancel') });
+      cancel.addEventListener('click', function () { finish(''); });
+      var go = h('button', { type: 'submit', class: 'ed-btn primary', text: s('tokGo') });
+      f.appendChild(h('div', { class: 'ed-actions' }, [cancel, go]));
+      d.appendChild(f); document.body.appendChild(d);
+      var done = false;
+      function finish(v) { if (done) return; done = true; if (d.open) d.close(); d.remove(); resolve(v); }
+      d.addEventListener('close', function () { finish(''); });
+      f.addEventListener('submit', function (e) { e.preventDefault(); finish(inp.value.trim()); });
+      d.showModal(); inp.focus();
+    });
   }
 
-  function importFile(f) {
-    if (!f) return;
-    var r = new FileReader();
-    r.onload = function () {
-      try {
-        var txt = String(r.result).replace(/\/\*[\s\S]*?\*\//g, '').trim();
-        var m = txt.match(/^window\.PROJECTS\s*=\s*([\s\S]*?);?\s*$/);
-        var a = JSON.parse(m ? m[1] : txt);
-        if (!Array.isArray(a) || !a.every(function (p) { return p && typeof p.title === 'string'; })) throw 0;
-        a.forEach(function (p, i) {
-          p.id = p.id || 'p-' + Date.now().toString(36) + i;
-          p.cat = ['arq', '3d', 'sw', 'web'].indexOf(p.cat) < 0 ? 'web' : p.cat;
-          p.desc = p.desc || {}; p.grad = p.grad || 1; p.img = p.img || ''; p.url = p.url || '';
-        });
-        if (confirm(s('impQ'))) Portfolio.replaceAll(a);
-      } catch (e) { alert(s('impBad')); }
-    };
-    r.readAsText(f);
+  async function publish(button) {
+    var token = getToken();
+    if (!token) { token = await askToken(); if (!token) return; setToken(token); }
+    var label = button.textContent;
+    button.disabled = true; button.textContent = s('pubBusy');
+    try {
+      var list = JSON.parse(JSON.stringify(Portfolio.get()));
+      // imagens carregadas do computador passam a ficheiros em img/
+      for (var i = 0; i < list.length; i++) {
+        var p = list[i], m = /^data:image\/(png|jpe?g|webp|gif|svg\+xml);base64,(.+)$/.exec(p.img || '');
+        if (!m) continue;
+        var name = 'img/' + p.id + '-' + Date.now().toString(36) + '.' + m[1].replace('jpeg', 'jpg').replace('svg+xml', 'svg');
+        var up = await gh('PUT', name, { message: 'Imagem: ' + (p.title || p.id), content: m[2], branch: BRANCH }, token);
+        if (!up.ok) throw up;
+        p.img = name;
+      }
+      var cur = await gh('GET', 'js/projects.js', null, token);
+      if (!cur.ok) throw cur;
+      var src = '/* Projetos do portfólio — gerado pelo modo de edição. Não editar à mão. */\nwindow.PROJECTS = ' + JSON.stringify(list, null, 2) + ';\n';
+      var put = await gh('PUT', 'js/projects.js', { message: 'Atualizar portfólio', content: b64utf8(src), sha: cur.json.sha, branch: BRANCH }, token);
+      if (!put.ok) throw put;
+      Portfolio.replaceAll(list);
+      alert(s('pubOk'));
+    } catch (e) {
+      if (e && (e.status === 401 || e.status === 403 || e.status === 404)) { setToken(''); alert(s('pubAuth')); }
+      else alert(s('pubErr'));
+    } finally { button.disabled = false; button.textContent = label; }
   }
 
   /* ---------- textos / ativação ---------- */

@@ -175,3 +175,6 @@ body.editing .item{outline:1px dashed var(--accent);outline-offset:-1px}
 .ph-box{aspect-ratio:4/3;display:grid;place-items:center;font:300 3rem var(--f-head);color:var(--line)}
 .item.placeholder .meta{background:transparent}
 .item.placeholder h4{color:var(--muted);font-weight:400}
+
+.ed-help{color:var(--muted);font-size:.85rem;line-height:1.5;margin:0}
+.ed-link{color:var(--accent);font-size:.85rem;word-break:break-all}

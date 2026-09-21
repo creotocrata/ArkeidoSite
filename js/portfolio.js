@@ -13,7 +13,12 @@
   function load() {
     try {
       var s = localStorage.getItem(KEY);
-      if (s) { var a = JSON.parse(s); if (Array.isArray(a)) return a; }
+      if (s) {
+        var a = JSON.parse(s);
+        // já publicado: um rascunho local igual ao site deixa de ser preciso
+        if (JSON.stringify(a) === JSON.stringify(window.PROJECTS || [])) { localStorage.removeItem(KEY); return clone(window.PROJECTS || []); }
+        if (Array.isArray(a)) return a;
+      }
     } catch (e) {}
     return clone(window.PROJECTS || []);
   }
