@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier Norte — Architecture Studio</title>
+<meta name="description" content="Atelier Norte is an architecture studio designing quiet, light-filled buildings.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ec;--ink:#1b1b1a;--muted:#6f6b64;--line:#d9d4ca;--accent:#8a6f4d;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:var(--bg);color:var(--ink);font:300 1rem/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1200px,100% - 48px);margin-inline:auto}
+header{position:fixed;inset:0 0 auto 0;z-index:50;background:rgba(244,241,236,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:28px;height:68px}
+.logo{font:500 1.5rem var(--serif);letter-spacing:.14em;text-transform:uppercase;margin-right:auto}
+.menu{display:flex;gap:28px;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+.menu a{color:var(--muted);transition:.2s}.menu a:hover{color:var(--ink)}
+.lang{display:flex;gap:4px;font-size:.75rem}
+.lang button{background:none;border:0;padding:4px 7px;cursor:pointer;color:var(--muted);font:500 .75rem var(--sans);letter-spacing:.08em}
+.lang button.active{color:var(--ink);border-bottom:1px solid var(--ink)}
+.burger{display:none;background:none;border:0;font-size:1.5rem;cursor:pointer}
+/* hero */
+.hero{min-height:100vh;display:grid;align-items:end;padding:120px 0 70px;position:relative;overflow:hidden}
+.hero-art{position:absolute;inset:0;z-index:0}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font:400 clamp(3rem,9vw,8rem)/.95 var(--serif);letter-spacing:-.02em;max-width:14ch}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{max-width:46ch;margin-top:28px;color:var(--muted);font-size:1.05rem}
+.eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-weight:500}
+section{padding:110px 0}
+h2{font:400 clamp(2.2rem,5vw,3.6rem)/1.05 var(--serif);margin-bottom:48px;letter-spacing:-.01em}
+/* projects */
+.projects{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.proj{grid-column:span 6;display:block}
+.proj:nth-child(1){grid-column:span 7}.proj:nth-child(2){grid-column:span 5}
+.proj:nth-child(3){grid-column:span 5}.proj:nth-child(4){grid-column:span 7}
+.proj .img{aspect-ratio:4/3;overflow:hidden;position:relative}
+.proj:nth-child(2) .img,.proj:nth-child(3) .img{aspect-ratio:3/4}
+.proj svg{width:100%;height:100%;display:block;transition:transform .9s}
+.proj:hover svg{transform:scale(1.05)}
+.proj h3{font:500 1.6rem var(--serif);margin-top:16px}
+.proj p{color:var(--muted);font-size:.85rem;letter-spacing:.05em}
+/* practice */
+.practice{background:#1b1b1a;color:#eee9df}
+.practice h2{color:#f4f1ec}
+.rows{border-top:1px solid #3a3935}
+.row{display:grid;grid-template-columns:80px 1fr 1.4fr;gap:24px;padding:30px 0;border-bottom:1px solid #3a3935;align-items:baseline}
+.row b{font:400 1rem var(--serif);color:var(--accent)}
+.row h3{font:400 1.8rem var(--serif)}
+.row p{color:#a9a59b}
+/* studio */
+.studio{display:grid;grid-template-columns:1fr 1.2fr;gap:70px;align-items:start}
+.studio h2{margin-bottom:0}
+.studio p{color:var(--muted);margin-bottom:18px}
+.stats{display:flex;gap:44px;margin-top:38px;flex-wrap:wrap}
+.stats strong{display:block;font:400 3.2rem/1 var(--serif);color:var(--ink)}
+.stats span{font-size:.8rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+/* press */
+.press{border-block:1px solid var(--line);padding:50px 0}
+.press .wrap{display:flex;gap:30px 60px;flex-wrap:wrap;justify-content:space-between;align-items:center;font:500 1.15rem var(--serif);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:70px}
+.contact p{color:var(--muted);margin-bottom:10px}
+.contact a.mail{font:400 clamp(1.4rem,3vw,2.2rem) var(--serif);border-bottom:1px solid var(--ink)}
+form{display:grid;gap:20px}
+label span{display:block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input,textarea,select{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);padding:10px 0;font:300 1rem var(--sans);color:var(--ink);border-radius:0}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ink)}
+button.send{justify-self:start;background:var(--ink);color:var(--bg);border:0;padding:15px 34px;font:500 .8rem var(--sans);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:.25s}
+button.send:hover{background:var(--accent)}
+.form-note{color:var(--accent);font-size:.9rem}
+footer{border-top:1px solid var(--line);padding:30px 0;font-size:.8rem;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s,transform .8s}.reveal.in{opacity:1;transform:none}
+@media(max-width:860px){
+ .burger{display:block}
+ .menu{position:fixed;inset:68px 0 auto 0;background:var(--bg);flex-direction:column;padding:26px 24px;gap:20px;border-bottom:1px solid var(--line);transform:translateY(-130%);transition:.35s}
+ .menu.open{transform:none}
+ .projects{grid-template-columns:1fr}.proj,.proj:nth-child(n){grid-column:auto}
+ .proj:nth-child(n) .img{aspect-ratio:4/3}
+ .row{grid-template-columns:44px 1fr}.row p{grid-column:2}
+ .studio,.contact{grid-template-columns:1fr;gap:36px}
+ section{padding:80px 0}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="#top" class="logo">Atelier Norte</a>
+    <nav class="menu">
+      <a href="#projects" data-i18n="nav.projects"></a>
+      <a href="#practice" data-i18n="nav.practice"></a>
+      <a href="#studio" data-i18n="nav.studio"></a>
+      <a href="#contact" data-i18n="nav.contact"></a>
+    </nav>
+    <div class="lang"><button data-lang="en">EN</button><button data-lang="pt">PT</button><button data-lang="es">ES</button></div>
+    <button class="burger" aria-label="Menu">≡</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" style="padding-bottom:70px">
+    <svg class="hero-art" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="1200" height="800" fill="#ece7dd"/>
+      <rect x="640" y="140" width="380" height="520" fill="#d9d1c2"/>
+      <rect x="700" y="200" width="150" height="460" fill="#c9bfab"/>
+      <rect x="870" y="260" width="150" height="400" fill="#b7a98f"/>
+      <rect x="600" y="660" width="500" height="6" fill="#1b1b1a"/>
+      <circle cx="1010" cy="170" r="54" fill="#8a6f4d" opacity=".55"/>
+      <g stroke="#1b1b1a" stroke-width="1" opacity=".25"><line x1="640" y1="140" x2="640" y2="660"/><line x1="1020" y1="140" x2="1020" y2="660"/><line x1="640" y1="140" x2="1020" y2="140"/></g>
+    </svg>
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="hero.eyebrow"></p>
+      <h1 data-i18n-html="hero.title"></h1>
+      <p data-i18n="hero.lead"></p>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="proj.eyebrow"></p>
+      <h2 data-i18n="proj.title"></h2>
+      <div class="projects">
+        <a class="proj reveal" href="#contact"><div class="img"><svg viewBox="0 0 700 525"><rect width="700" height="525" fill="#d8d0c0"/><rect x="90" y="150" width="520" height="290" fill="#efe9dd"/><rect x="90" y="120" width="520" height="30" fill="#1b1b1a"/><rect x="140" y="200" width="120" height="240" fill="#8a6f4d"/><rect x="300" y="200" width="270" height="150" fill="#aac0c8" opacity=".7"/><rect x="0" y="440" width="700" height="85" fill="#a89a80"/></svg></div><h3>Casa do Pinhal</h3><p data-i18n="p1.meta"></p></a>
+        <a class="proj reveal" href="#contact"><div class="img"><svg viewBox="0 0 525 700"><rect width="525" height="700" fill="#c7cfc4"/><rect x="120" y="90" width="285" height="520" fill="#e9e5da"/><g fill="#1b1b1a" opacity=".85"><rect x="150" y="130" width="60" height="90"/><rect x="230" y="130" width="60" height="90"/><rect x="310" y="130" width="60" height="90"/><rect x="150" y="260" width="60" height="90"/><rect x="230" y="260" width="60" height="90"/><rect x="310" y="260" width="60" height="90"/><rect x="150" y="390" width="60" height="90"/><rect x="310" y="390" width="60" height="90"/></g><rect x="230" y="500" width="60" height="110" fill="#8a6f4d"/></svg></div><h3>Rua Nova Housing</h3><p data-i18n="p2.meta"></p></a>
+        <a class="proj reveal" href="#contact"><div class="img"><svg viewBox="0 0 525 700"><rect width="525" height="700" fill="#e3dccd"/><path d="M60 620 L60 300 Q262 60 465 300 L465 620 Z" fill="#f4f1ec" stroke="#1b1b1a" stroke-width="3"/><rect x="220" y="400" width="86" height="220" fill="#8a6f4d"/><circle cx="262" cy="290" r="34" fill="#aac0c8"/></svg></div><h3>Capela Serena</h3><p data-i18n="p3.meta"></p></a>
+        <a class="proj reveal" href="#contact"><div class="img"><svg viewBox="0 0 700 525"><rect width="700" height="525" fill="#b9b4a4"/><rect x="0" y="360" width="700" height="165" fill="#8f8a78"/><path d="M60 360 L60 200 L640 160 L640 360Z" fill="#1b1b1a"/><g fill="#efe9dd"><rect x="110" y="230" width="90" height="130"/><rect x="230" y="226" width="90" height="134"/><rect x="350" y="222" width="90" height="138"/><rect x="470" y="218" width="120" height="142"/></g></svg></div><h3>Estação Verde Office</h3><p data-i18n="p4.meta"></p></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="practice" class="practice">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="prac.eyebrow"></p>
+      <h2 data-i18n="prac.title"></h2>
+      <div class="rows">
+        <div class="row reveal"><b>01</b><h3 data-i18n="r1.t"></h3><p data-i18n="r1.d"></p></div>
+        <div class="row reveal"><b>02</b><h3 data-i18n="r2.t"></h3><p data-i18n="r2.d"></p></div>
+        <div class="row reveal"><b>03</b><h3 data-i18n="r3.t"></h3><p data-i18n="r3.d"></p></div>
+        <div class="row reveal"><b>04</b><h3 data-i18n="r4.t"></h3><p data-i18n="r4.d"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="studio">
+    <div class="wrap studio">
+      <div><p class="eyebrow" data-i18n="st.eyebrow"></p><h2 data-i18n="st.title"></h2></div>
+      <div>
+        <p data-i18n="st.p1"></p><p data-i18n="st.p2"></p>
+        <div class="stats">
+          <div><strong>18</strong><span data-i18n="stat1"></span></div>
+          <div><strong>64</strong><span data-i18n="stat2"></span></div>
+          <div><strong>9</strong><span data-i18n="stat3"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="press"><div class="wrap"><span>Dezeen</span><span>ArchDaily</span><span>Domus</span><span>Wallpaper*</span><span>Casa Vogue</span></div></div>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <div>
+        <p class="eyebrow" data-i18n="ct.eyebrow"></p>
+        <h2 data-i18n="ct.title"></h2>
+        <p data-i18n="ct.lead"></p>
+        <p><a class="mail" href="#contact">studio@ateliernorte.example</a></p>
+        <p style="margin-top:24px">Rua das Flores 42, 4050-262 Porto</p>
+      </div>
+      <form data-demo>
+        <label><span data-i18n="f.name"></span><input required></label>
+        <label><span data-i18n="f.email"></span><input type="email" required></label>
+        <label><span data-i18n="f.type"></span>
+          <select><option data-i18n="o1"></option><option data-i18n="o2"></option><option data-i18n="o3"></option></select></label>
+        <label><span data-i18n="f.msg"></span><textarea rows="4" required></textarea></label>
+        <button class="send" data-i18n="f.send"></button>
+        <p class="form-note" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>© <span id="y"></span> Atelier Norte</span><span data-i18n="foot"></span></div></footer>
+
+<script src="../shared/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+initI18n({
+en:{
+ 'meta.title':'Atelier Norte — Architecture Studio',
+ 'nav.projects':'Projects','nav.practice':'Practice','nav.studio':'Studio','nav.contact':'Contact',
+ 'hero.eyebrow':'Architecture · Interiors · Landscape',
+ 'hero.title':'Quiet buildings, <em>full</em> of light.',
+ 'hero.lead':'We are an independent architecture studio in Porto designing homes, workplaces and public spaces that age gracefully and feel like they were always there.',
+ 'proj.eyebrow':'Selected work','proj.title':'Projects',
+ 'p1.meta':'Private house · Sintra · 2024','p2.meta':'Housing · Porto · 2023','p3.meta':'Chapel · Douro Valley · 2022','p4.meta':'Office building · Lisbon · 2024',
+ 'prac.eyebrow':'What we do','prac.title':'Practice',
+ 'r1.t':'Architecture','r1.d':'Complete design services from feasibility studies to construction supervision.',
+ 'r2.t':'Interior design','r2.d':'Spaces, furniture and detailing conceived together as a single, coherent whole.',
+ 'r3.t':'Refurbishment','r3.d':'Sensitive interventions in heritage buildings, balancing memory and contemporary use.',
+ 'r4.t':'Masterplanning','r4.d':'Urban and landscape strategies for housing, campuses and mixed-use developments.',
+ 'st.eyebrow':'The studio','st.title':'Less noise. More place.',
+ 'st.p1':'Founded in 2008, Atelier Norte is a team of architects, designers and model-makers who believe that good architecture starts with listening — to the site, to the climate and to the people who will live in it.',
+ 'st.p2':'We work with local materials and skilled craftspeople, and we stay involved from the first sketch to the last handover.',
+ 'stat1':'Years of practice','stat2':'Built projects','stat3':'Design awards',
+ 'ct.eyebrow':'Get in touch','ct.title':'Let’s talk about your project.','ct.lead':'Tell us about your site and your ideas. We usually reply within two working days.',
+ 'f.name':'Name','f.email':'Email','f.type':'Project type','f.msg':'Message','f.send':'Send enquiry',
+ 'o1':'New build','o2':'Refurbishment','o3':'Interior design',
+ 'form.demo':'Thank you! This is a demo form — nothing was sent.',
+ 'foot':'Architecture studio · Porto'
+},
+pt:{
+ 'meta.title':'Atelier Norte — Estúdio de Arquitetura',
+ 'nav.projects':'Projetos','nav.practice':'Prática','nav.studio':'Estúdio','nav.contact':'Contacto',
+ 'hero.eyebrow':'Arquitetura · Interiores · Paisagem',
+ 'hero.title':'Edifícios serenos, <em>cheios</em> de luz.',
+ 'hero.lead':'Somos um estúdio de arquitetura independente no Porto que projeta casas, locais de trabalho e espaços públicos que envelhecem bem e parecem ter estado sempre ali.',
+ 'proj.eyebrow':'Trabalho selecionado','proj.title':'Projetos',
+ 'p1.meta':'Casa particular · Sintra · 2024','p2.meta':'Habitação · Porto · 2023','p3.meta':'Capela · Vale do Douro · 2022','p4.meta':'Edifício de escritórios · Lisboa · 2024',
+ 'prac.eyebrow':'O que fazemos','prac.title':'Prática',
+ 'r1.t':'Arquitetura','r1.d':'Serviço completo, dos estudos de viabilidade ao acompanhamento de obra.',
+ 'r2.t':'Design de interiores','r2.d':'Espaço, mobiliário e detalhe pensados em conjunto, como um todo coerente.',
+ 'r3.t':'Reabilitação','r3.d':'Intervenções sensíveis em edifícios com valor patrimonial, entre a memória e o uso contemporâneo.',
+ 'r4.t':'Planeamento urbano','r4.d':'Estratégias urbanas e de paisagem para habitação, campus e usos mistos.',
+ 'st.eyebrow':'O estúdio','st.title':'Menos ruído. Mais lugar.',
+ 'st.p1':'Fundado em 2008, o Atelier Norte é uma equipa de arquitetos, designers e maquetistas que acredita que a boa arquitetura começa por ouvir — o lugar, o clima e as pessoas que o vão habitar.',
+ 'st.p2':'Trabalhamos com materiais locais e artesãos qualificados, e estamos presentes do primeiro esboço à entrega final.',
+ 'stat1':'Anos de prática','stat2':'Projetos construídos','stat3':'Prémios de design',
+ 'ct.eyebrow':'Contacto','ct.title':'Vamos falar do seu projeto.','ct.lead':'Conte-nos sobre o terreno e as suas ideias. Respondemos normalmente em dois dias úteis.',
+ 'f.name':'Nome','f.email':'Email','f.type':'Tipo de projeto','f.msg':'Mensagem','f.send':'Enviar pedido',
+ 'o1':'Construção nova','o2':'Reabilitação','o3':'Design de interiores',
+ 'form.demo':'Obrigado! Este é um formulário de demonstração — nada foi enviado.',
+ 'foot':'Estúdio de arquitetura · Porto'
+},
+es:{
+ 'meta.title':'Atelier Norte — Estudio de Arquitectura',
+ 'nav.projects':'Proyectos','nav.practice':'Práctica','nav.studio':'Estudio','nav.contact':'Contacto',
+ 'hero.eyebrow':'Arquitectura · Interiores · Paisaje',
+ 'hero.title':'Edificios serenos, <em>llenos</em> de luz.',
+ 'hero.lead':'Somos un estudio de arquitectura independiente en Oporto que proyecta viviendas, espacios de trabajo y espacios públicos que envejecen con dignidad y parecen haber estado siempre allí.',
+ 'proj.eyebrow':'Obra seleccionada','proj.title':'Proyectos',
+ 'p1.meta':'Vivienda privada · Sintra · 2024','p2.meta':'Vivienda colectiva · Oporto · 2023','p3.meta':'Capilla · Valle del Duero · 2022','p4.meta':'Edificio de oficinas · Lisboa · 2024',
+ 'prac.eyebrow':'Qué hacemos','prac.title':'Práctica',
+ 'r1.t':'Arquitectura','r1.d':'Servicio completo, desde los estudios de viabilidad hasta la dirección de obra.',
+ 'r2.t':'Diseño de interiores','r2.d':'Espacio, mobiliario y detalle concebidos juntos como un todo coherente.',
+ 'r3.t':'Rehabilitación','r3.d':'Intervenciones sensibles en edificios patrimoniales, entre la memoria y el uso contemporáneo.',
+ 'r4.t':'Planeamiento urbano','r4.d':'Estrategias urbanas y de paisaje para vivienda, campus y usos mixtos.',
+ 'st.eyebrow':'El estudio','st.title':'Menos ruido. Más lugar.',
+ 'st.p1':'Fundado en 2008, Atelier Norte es un equipo de arquitectos, diseñadores y maquetistas convencidos de que la buena arquitectura empieza por escuchar: el lugar, el clima y las personas que lo habitarán.',
+ 'st.p2':'Trabajamos con materiales locales y artesanos cualificados, y acompañamos el proyecto desde el primer boceto hasta la entrega final.',
+ 'stat1':'Años de práctica','stat2':'Proyectos construidos','stat3':'Premios de diseño',
+ 'ct.eyebrow':'Contacto','ct.title':'Hablemos de su proyecto.','ct.lead':'Cuéntenos sobre su terreno y sus ideas. Solemos responder en dos días laborables.',
+ 'f.name':'Nombre','f.email':'Correo electrónico','f.type':'Tipo de proyecto','f.msg':'Mensaje','f.send':'Enviar consulta',
+ 'o1':'Obra nueva','o2':'Rehabilitación','o3':'Diseño de interiores',
+ 'form.demo':'¡Gracias! Este es un formulario de demostración: no se envió nada.',
+ 'foot':'Estudio de arquitectura · Oporto'
+}
+}, 'en', 'demo-arq-lang');
+</script>
+</body>
+</html>

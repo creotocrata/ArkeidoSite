@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barros & Associados — Sociedade de Advogados</title>
+<meta name="description" content="Barros & Associados: aconselhamento jurídico em direito empresarial, imobiliário, família e contencioso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1b2e;--navy2:#14263f;--gold:#b8955a;--gold2:#d4b47d;--paper:#f6f3ee;--ink:#1c2533;--muted:#6b7482;--line:#e1dcd2;--f-head:'Playfair Display',Georgia,serif;--f-body:'Source Sans 3',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font:400 1.05rem/1.7 var(--f-body);color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1140px,100% - 44px);margin-inline:auto}
+header{position:fixed;inset:0 0 auto 0;z-index:50;background:rgba(13,27,46,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(184,149,90,.25)}
+header .wrap{display:flex;align-items:center;gap:28px;height:76px}
+.logo{margin-right:auto;color:#fff;font:600 1.35rem var(--f-head);line-height:1.1}
+.logo small{display:block;font:400 .62rem var(--f-body);letter-spacing:.32em;text-transform:uppercase;color:var(--gold2);margin-top:3px}
+.menu{display:flex;gap:28px;font-size:.88rem;letter-spacing:.06em;text-transform:uppercase}
+.menu a{color:#b9c3d1;transition:.2s}.menu a:hover{color:var(--gold2)}
+.lang{display:flex;border:1px solid rgba(255,255,255,.2);border-radius:3px}
+.lang button{background:none;border:0;color:#b9c3d1;padding:5px 10px;font:600 .72rem var(--f-body);cursor:pointer;letter-spacing:.06em}
+.lang button.active{background:var(--gold);color:var(--navy)}
+.burger{display:none;background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer}
+.btn{display:inline-block;background:var(--gold);color:var(--navy);padding:15px 32px;font:600 .82rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--gold);cursor:pointer;transition:.25s}
+.btn:hover{background:var(--gold2)}
+.btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}.btn.ghost:hover{border-color:var(--gold2);color:var(--gold2)}
+/* hero */
+.hero{background:linear-gradient(115deg,rgba(13,27,46,.97) 45%,rgba(13,27,46,.8)),repeating-linear-gradient(90deg,#0d1b2e 0 90px,#10223a 90px 92px);color:#fff;min-height:100vh;display:flex;align-items:center;padding:130px 0 90px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-8%;top:50%;width:min(520px,60vw);aspect-ratio:1;transform:translateY(-50%);border:1px solid rgba(184,149,90,.3);border-radius:50%;box-shadow:0 0 0 40px rgba(184,149,90,.05),0 0 0 90px rgba(184,149,90,.03)}
+.hero .wrap{position:relative;z-index:1}
+.eyebrow{color:var(--gold);letter-spacing:.28em;text-transform:uppercase;font-size:.75rem;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:40px;height:1px;background:var(--gold)}
+h1{font:600 clamp(2.5rem,6vw,4.6rem)/1.08 var(--f-head);max-width:16ch;margin-bottom:26px}
+h1 em{font-style:italic;color:var(--gold2)}
+.hero p.lead{max-width:54ch;color:#b9c3d1;font-size:1.2rem}
+.cta{display:flex;gap:16px;flex-wrap:wrap;margin-top:38px}
+section{padding:100px 0}
+h2{font:600 clamp(2rem,4vw,3rem)/1.15 var(--f-head);margin-bottom:48px;color:var(--navy)}
+.center{text-align:center}.center .eyebrow{justify-content:center}.center .eyebrow::before{display:none}
+/* areas */
+.areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.area{background:#fff;padding:40px 30px;transition:.3s;position:relative}
+.area:hover{background:var(--navy);color:#fff}
+.area:hover p{color:#b9c3d1}.area:hover h3{color:#fff}.area:hover .n{color:var(--gold2)}
+.area .n{font:600 1rem var(--f-head);color:var(--gold);margin-bottom:44px}
+.area h3{font:600 1.4rem var(--f-head);color:var(--navy);margin-bottom:12px;transition:.3s}
+.area p{color:var(--muted);font-size:.98rem;transition:.3s}
+/* about */
+.about{background:var(--paper)}
+.about .wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:70px;align-items:center}
+.quote{background:var(--navy);color:#fff;padding:54px 44px;position:relative}
+.quote::before{content:"“";position:absolute;top:-6px;left:26px;font:700 7rem/1 var(--f-head);color:var(--gold);opacity:.6}
+.quote p{font:italic 500 1.5rem/1.45 var(--f-head);position:relative;margin-top:30px}
+.quote span{display:block;margin-top:22px;color:var(--gold2);font-size:.85rem;letter-spacing:.14em;text-transform:uppercase}
+.about h2{margin-bottom:24px}
+.about p{color:var(--muted);margin-bottom:16px}
+.figures{display:flex;gap:44px;margin-top:32px;flex-wrap:wrap}
+.figures strong{display:block;font:600 2.8rem/1 var(--f-head);color:var(--navy)}
+.figures span{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+/* team */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:30px}
+.member .ph{aspect-ratio:4/5;background:linear-gradient(160deg,var(--navy2),var(--navy));display:grid;place-items:center;font:600 3.4rem var(--f-head);color:var(--gold2);position:relative;overflow:hidden}
+.member .ph::after{content:"";position:absolute;inset:14px;border:1px solid rgba(184,149,90,.35)}
+.member h3{font:600 1.25rem var(--f-head);color:var(--navy);margin-top:18px}
+.member p{color:var(--muted);font-size:.92rem}
+/* why */
+.why{background:var(--navy);color:#fff}
+.why h2{color:#fff}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:36px}
+.why-item{border-top:1px solid rgba(184,149,90,.5);padding-top:22px}
+.why-item h3{font:600 1.25rem var(--f-head);margin-bottom:10px;color:var(--gold2)}
+.why-item p{color:#b9c3d1;font-size:.98rem}
+/* contact */
+.contact .wrap{display:grid;grid-template-columns:1fr 1fr;gap:70px}
+.contact p{color:var(--muted);margin-bottom:12px}
+.contact .item{margin-top:24px;padding-left:18px;border-left:2px solid var(--gold)}
+.contact .item b{display:block;color:var(--navy);font-weight:600}
+form{display:grid;gap:18px}
+label span{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:6px;font-weight:600}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#fff;padding:14px;font:400 1rem var(--f-body);color:var(--ink);border-radius:0}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.form-note{color:var(--gold);font-weight:600}
+footer{background:#08111e;color:#7f8ba0;padding:34px 0;font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}.reveal.in{opacity:1;transform:none}
+@media(max-width:860px){
+ .burger{display:block}
+ .menu{position:fixed;inset:76px 0 auto 0;background:var(--navy);flex-direction:column;padding:26px 22px;gap:20px;transform:translateY(-140%);transition:.35s;z-index:-1;border-bottom:1px solid rgba(184,149,90,.3)}
+ .menu.open{transform:none}
+ .about .wrap,.contact .wrap{grid-template-columns:1fr;gap:40px}
+ section{padding:72px 0}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="#top" class="logo">Barros &amp; Associados<small data-i18n="logo.sub"></small></a>
+    <nav class="menu">
+      <a href="#areas" data-i18n="nav.areas"></a>
+      <a href="#sociedade" data-i18n="nav.firm"></a>
+      <a href="#equipa" data-i18n="nav.team"></a>
+      <a href="#contacto" data-i18n="nav.contact"></a>
+    </nav>
+    <div class="lang"><button data-lang="pt">PT</button><button data-lang="en">EN</button><button data-lang="es">ES</button></div>
+    <button class="burger" aria-label="Menu">≡</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="hero.eyebrow"></p>
+      <h1 data-i18n-html="hero.title"></h1>
+      <p class="lead" data-i18n="hero.lead"></p>
+      <div class="cta"><a href="#contacto" class="btn" data-i18n="cta.consult"></a><a href="#areas" class="btn ghost" data-i18n="cta.areas"></a></div>
+    </div>
+  </section>
+
+  <section id="areas">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="areas.eyebrow"></p>
+      <h2 data-i18n="areas.title"></h2>
+      <div class="areas">
+        <article class="area reveal"><div class="n">I</div><h3 data-i18n="a1.t"></h3><p data-i18n="a1.d"></p></article>
+        <article class="area reveal"><div class="n">II</div><h3 data-i18n="a2.t"></h3><p data-i18n="a2.d"></p></article>
+        <article class="area reveal"><div class="n">III</div><h3 data-i18n="a3.t"></h3><p data-i18n="a3.d"></p></article>
+        <article class="area reveal"><div class="n">IV</div><h3 data-i18n="a4.t"></h3><p data-i18n="a4.d"></p></article>
+        <article class="area reveal"><div class="n">V</div><h3 data-i18n="a5.t"></h3><p data-i18n="a5.d"></p></article>
+        <article class="area reveal"><div class="n">VI</div><h3 data-i18n="a6.t"></h3><p data-i18n="a6.d"></p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="sociedade" class="about">
+    <div class="wrap">
+      <div class="quote reveal"><p data-i18n="q.text"></p><span data-i18n="q.by"></span></div>
+      <div>
+        <p class="eyebrow" data-i18n="firm.eyebrow"></p>
+        <h2 data-i18n="firm.title"></h2>
+        <p data-i18n="firm.p1"></p><p data-i18n="firm.p2"></p>
+        <div class="figures">
+          <div><strong>30</strong><span data-i18n="fig1"></span></div>
+          <div><strong>2.500+</strong><span data-i18n="fig2"></span></div>
+          <div><strong>3</strong><span data-i18n="fig3"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="equipa">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="team.eyebrow"></p>
+      <h2 data-i18n="team.title"></h2>
+      <div class="team-grid">
+        <div class="member reveal"><div class="ph">AB</div><h3>Dr. António Barros</h3><p data-i18n="m1"></p></div>
+        <div class="member reveal"><div class="ph">CM</div><h3>Dra. Carla Monteiro</h3><p data-i18n="m2"></p></div>
+        <div class="member reveal"><div class="ph">JL</div><h3>Dr. João Lacerda</h3><p data-i18n="m3"></p></div>
+        <div class="member reveal"><div class="ph">SR</div><h3>Dra. Sofia Ramos</h3><p data-i18n="m4"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="why.eyebrow"></p>
+      <h2 data-i18n="why.title"></h2>
+      <div class="why-grid">
+        <div class="why-item reveal"><h3 data-i18n="y1.t"></h3><p data-i18n="y1.d"></p></div>
+        <div class="why-item reveal"><h3 data-i18n="y2.t"></h3><p data-i18n="y2.d"></p></div>
+        <div class="why-item reveal"><h3 data-i18n="y3.t"></h3><p data-i18n="y3.d"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="contact">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" data-i18n="ct.eyebrow"></p>
+        <h2 data-i18n="ct.title" style="margin-bottom:20px"></h2>
+        <p data-i18n="ct.lead"></p>
+        <div class="item"><b data-i18n="ct.addr"></b>Av. da Liberdade 200, 4.º Dto · 1250-147 Lisboa</div>
+        <div class="item"><b data-i18n="ct.phone"></b>+351 210 000 000</div>
+        <div class="item"><b>Email</b>geral@barrosassociados.example</div>
+      </div>
+      <form data-demo>
+        <label><span data-i18n="f.name"></span><input required></label>
+        <label><span data-i18n="f.email"></span><input type="email" required></label>
+        <label><span data-i18n="f.area"></span>
+          <select><option data-i18n="a1.t"></option><option data-i18n="a2.t"></option><option data-i18n="a3.t"></option><option data-i18n="a4.t"></option><option data-i18n="a5.t"></option><option data-i18n="a6.t"></option></select></label>
+        <label><span data-i18n="f.msg"></span><textarea rows="4" required></textarea></label>
+        <button class="btn" style="justify-self:start" data-i18n="f.send"></button>
+        <p class="form-note" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>© <span id="y"></span> Barros &amp; Associados, Sociedade de Advogados, SP, RL</span><span data-i18n="foot"></span></div></footer>
+
+<script src="../shared/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+initI18n({
+pt:{
+ 'meta.title':'Barros & Associados — Sociedade de Advogados',
+ 'logo.sub':'Sociedade de Advogados','nav.areas':'Áreas de prática','nav.firm':'A Sociedade','nav.team':'Equipa','nav.contact':'Contacto',
+ 'hero.eyebrow':'Advocacia desde 1994',
+ 'hero.title':'Rigor, discrição e <em>defesa</em> dos seus interesses.',
+ 'hero.lead':'Aconselhamos empresas, famílias e investidores com uma abordagem clara, estratégica e próxima, em todas as fases do processo.',
+ 'cta.consult':'Marcar consulta','cta.areas':'Áreas de prática',
+ 'areas.eyebrow':'Onde podemos ajudar','areas.title':'Áreas de prática',
+ 'a1.t':'Direito Empresarial','a1.d':'Constituição de sociedades, contratos comerciais, fusões e aquisições, compliance.',
+ 'a2.t':'Direito Imobiliário','a2.d':'Compra e venda, arrendamento, urbanismo, licenciamento e investimento.',
+ 'a3.t':'Família e Sucessões','a3.d':'Divórcio, responsabilidades parentais, partilhas, testamentos e heranças.',
+ 'a4.t':'Contencioso','a4.d':'Representação em tribunal e arbitragem, com preparação rigorosa de cada caso.',
+ 'a5.t':'Direito do Trabalho','a5.d':'Contratos, despedimentos, negociação coletiva e assessoria a empregadores e trabalhadores.',
+ 'a6.t':'Direito Penal','a6.d':'Defesa em processo penal e contraordenacional, com confidencialidade absoluta.',
+ 'q.text':'Um bom advogado não ganha apenas processos. Evita que os problemas cheguem a tribunal.','q.by':'Dr. António Barros, sócio fundador',
+ 'firm.eyebrow':'A Sociedade','firm.title':'Três décadas de confiança.',
+ 'firm.p1':'Fundada em Lisboa em 1994, a Barros & Associados acompanha clientes em decisões críticas, combinando conhecimento técnico profundo com uma relação direta e transparente.',
+ 'firm.p2':'Cada cliente tem um advogado responsável, disponível e informado, e honorários acordados de forma clara logo à partida.',
+ 'fig1':'Anos de experiência','fig2':'Processos acompanhados','fig3':'Escritórios',
+ 'team.eyebrow':'Quem o representa','team.title':'A nossa equipa',
+ 'm1':'Sócio fundador · Direito Empresarial','m2':'Sócia · Família e Sucessões','m3':'Sócio · Contencioso e Penal','m4':'Associada · Imobiliário e Trabalho',
+ 'why.eyebrow':'O nosso compromisso','why.title':'Porquê escolher-nos',
+ 'y1.t':'Clareza','y1.d':'Explicamos cada passo, riscos e custos numa linguagem que se entende.',
+ 'y2.t':'Discrição','y2.d':'Sigilo profissional absoluto em todas as matérias e em todas as fases.',
+ 'y3.t':'Resultados','y3.d':'Estratégia orientada aos seus objetivos, seja negociar, prevenir ou litigar.',
+ 'ct.eyebrow':'Contacto','ct.title':'Fale com um advogado','ct.lead':'A primeira conversa não o compromete. Diga-nos o essencial e respondemos no próprio dia útil.',
+ 'ct.addr':'Morada','ct.phone':'Telefone',
+ 'f.name':'Nome','f.email':'Email','f.area':'Área jurídica','f.msg':'Descreva brevemente a situação','f.send':'Enviar pedido',
+ 'form.demo':'Obrigado! Este é um formulário de demonstração — nada foi enviado.',
+ 'foot':'Cédula da Sociedade n.º 00/00 · Ordem dos Advogados'
+},
+en:{
+ 'meta.title':'Barros & Associados — Law Firm',
+ 'logo.sub':'Law Firm','nav.areas':'Practice areas','nav.firm':'The Firm','nav.team':'Team','nav.contact':'Contact',
+ 'hero.eyebrow':'Legal counsel since 1994',
+ 'hero.title':'Rigour, discretion and <em>defence</em> of your interests.',
+ 'hero.lead':'We advise companies, families and investors with a clear, strategic and personal approach, at every stage of the process.',
+ 'cta.consult':'Book a consultation','cta.areas':'Practice areas',
+ 'areas.eyebrow':'How we can help','areas.title':'Practice areas',
+ 'a1.t':'Corporate Law','a1.d':'Company formation, commercial contracts, mergers & acquisitions, compliance.',
+ 'a2.t':'Real Estate Law','a2.d':'Sales and purchases, leases, planning, permits and investment.',
+ 'a3.t':'Family & Succession','a3.d':'Divorce, parental responsibility, estate division, wills and inheritance.',
+ 'a4.t':'Litigation','a4.d':'Court and arbitration representation, with meticulous preparation of every case.',
+ 'a5.t':'Employment Law','a5.d':'Contracts, dismissals, collective bargaining and advice for employers and employees.',
+ 'a6.t':'Criminal Law','a6.d':'Defence in criminal and administrative offence proceedings, in absolute confidence.',
+ 'q.text':'A good lawyer doesn’t only win cases. A good lawyer keeps problems from reaching court.','q.by':'Dr. António Barros, founding partner',
+ 'firm.eyebrow':'The Firm','firm.title':'Three decades of trust.',
+ 'firm.p1':'Founded in Lisbon in 1994, Barros & Associados guides clients through critical decisions, combining deep technical knowledge with a direct, transparent relationship.',
+ 'firm.p2':'Every client has a responsible lawyer who is available and informed, and fees agreed clearly from the outset.',
+ 'fig1':'Years of experience','fig2':'Cases handled','fig3':'Offices',
+ 'team.eyebrow':'Who represents you','team.title':'Our team',
+ 'm1':'Founding partner · Corporate Law','m2':'Partner · Family & Succession','m3':'Partner · Litigation & Criminal','m4':'Associate · Real Estate & Employment',
+ 'why.eyebrow':'Our commitment','why.title':'Why choose us',
+ 'y1.t':'Clarity','y1.d':'We explain each step, risk and cost in language you can understand.',
+ 'y2.t':'Discretion','y2.d':'Absolute professional secrecy in every matter and at every stage.',
+ 'y3.t':'Results','y3.d':'A strategy built around your goals, whether that means negotiating, preventing or litigating.',
+ 'ct.eyebrow':'Contact','ct.title':'Speak to a lawyer','ct.lead':'The first conversation carries no commitment. Tell us the essentials and we will reply the same business day.',
+ 'ct.addr':'Address','ct.phone':'Phone',
+ 'f.name':'Name','f.email':'Email','f.area':'Legal area','f.msg':'Briefly describe your situation','f.send':'Send request',
+ 'form.demo':'Thank you! This is a demo form — nothing was sent.',
+ 'foot':'Firm registration no. 00/00 · Portuguese Bar Association'
+},
+es:{
+ 'meta.title':'Barros & Associados — Sociedad de Abogados',
+ 'logo.sub':'Sociedad de Abogados','nav.areas':'Áreas de práctica','nav.firm':'La Sociedad','nav.team':'Equipo','nav.contact':'Contacto',
+ 'hero.eyebrow':'Abogacía desde 1994',
+ 'hero.title':'Rigor, discreción y <em>defensa</em> de sus intereses.',
+ 'hero.lead':'Asesoramos a empresas, familias e inversores con un enfoque claro, estratégico y cercano, en todas las fases del proceso.',
+ 'cta.consult':'Pedir consulta','cta.areas':'Áreas de práctica',
+ 'areas.eyebrow':'En qué podemos ayudar','areas.title':'Áreas de práctica',
+ 'a1.t':'Derecho Mercantil','a1.d':'Constitución de sociedades, contratos mercantiles, fusiones y adquisiciones, compliance.',
+ 'a2.t':'Derecho Inmobiliario','a2.d':'Compraventa, arrendamientos, urbanismo, licencias e inversión.',
+ 'a3.t':'Familia y Sucesiones','a3.d':'Divorcio, responsabilidad parental, particiones, testamentos y herencias.',
+ 'a4.t':'Contencioso','a4.d':'Representación en juicio y arbitraje, con una preparación rigurosa de cada caso.',
+ 'a5.t':'Derecho Laboral','a5.d':'Contratos, despidos, negociación colectiva y asesoría a empleadores y trabajadores.',
+ 'a6.t':'Derecho Penal','a6.d':'Defensa en procesos penales y administrativos sancionadores, con absoluta confidencialidad.',
+ 'q.text':'Un buen abogado no solo gana pleitos. Evita que los problemas lleguen a los tribunales.','q.by':'Dr. António Barros, socio fundador',
+ 'firm.eyebrow':'La Sociedad','firm.title':'Tres décadas de confianza.',
+ 'firm.p1':'Fundada en Lisboa en 1994, Barros & Associados acompaña a sus clientes en decisiones críticas, combinando un profundo conocimiento técnico con una relación directa y transparente.',
+ 'firm.p2':'Cada cliente cuenta con un abogado responsable, disponible e informado, y con honorarios acordados con claridad desde el principio.',
+ 'fig1':'Años de experiencia','fig2':'Asuntos atendidos','fig3':'Oficinas',
+ 'team.eyebrow':'Quién le representa','team.title':'Nuestro equipo',
+ 'm1':'Socio fundador · Derecho Mercantil','m2':'Socia · Familia y Sucesiones','m3':'Socio · Contencioso y Penal','m4':'Asociada · Inmobiliario y Laboral',
+ 'why.eyebrow':'Nuestro compromiso','why.title':'Por qué elegirnos',
+ 'y1.t':'Claridad','y1.d':'Explicamos cada paso, riesgo y coste en un lenguaje comprensible.',
+ 'y2.t':'Discreción','y2.d':'Secreto profesional absoluto en todos los asuntos y en todas las fases.',
+ 'y3.t':'Resultados','y3.d':'Una estrategia orientada a sus objetivos, ya sea negociar, prevenir o litigar.',
+ 'ct.eyebrow':'Contacto','ct.title':'Hable con un abogado','ct.lead':'La primera conversación no le compromete a nada. Cuéntenos lo esencial y responderemos el mismo día hábil.',
+ 'ct.addr':'Dirección','ct.phone':'Teléfono',
+ 'f.name':'Nombre','f.email':'Correo electrónico','f.area':'Área jurídica','f.msg':'Describa brevemente su situación','f.send':'Enviar solicitud',
+ 'form.demo':'¡Gracias! Este es un formulario de demostración: no se envió nada.',
+ 'foot':'Registro de la Sociedad n.º 00/00 · Colegio de Abogados de Portugal'
+}
+}, 'pt', 'demo-advogados-lang');
+</script>
+</body>
+</html>

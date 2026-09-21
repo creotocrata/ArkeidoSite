@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arkeido — Arquitetura, 3D, Software & Web Design</title>
+  <meta name="description" content="Arkeido: arquitetura, renderização 3D, desenvolvimento de software e web design.">
+  <link rel="canonical" href="https://arkeido.com/">
+  <meta name="theme-color" content="#0b0c0e">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Arkeido — Arquitetura, 3D, Software &amp; Web Design">
+  <meta property="og:description" content="Arkeido: arquitetura, renderização 3D, desenvolvimento de software e web design.">
+  <meta property="og:url" content="https://arkeido.com/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230b0c0e%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-size=%2720%27 font-family=%27Arial%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23c9a46a%27%3EA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a href="#top" class="logo">ARKEIDO<span>.</span></a>
+  <nav class="links" id="links">
+    <a href="#servicos" data-i18n="nav.services">Serviços</a>
+    <a href="#portfolio" data-i18n="nav.portfolio">Portfólio</a>
+    <a href="#processo" data-i18n="nav.process">Processo</a>
+    <a href="#sobre" data-i18n="nav.about">Sobre</a>
+    <a href="#contacto" class="btn btn-sm" data-i18n="nav.contact">Contacto</a>
+  </nav>
+  <div class="lang" role="group" aria-label="Language">
+    <button data-lang="pt" class="active">PT</button><button data-lang="en">EN</button>
+  </div>
+  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span></button>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <p class="eyebrow" data-i18n="hero.eyebrow">Arquitetura · 3D · Software · Web</p>
+      <h1 data-i18n-html="hero.title">Damos forma a <em>ideias</em>,<br>do espaço ao ecrã.</h1>
+      <p class="lead" data-i18n="hero.lead">Somos um estúdio que une arquitetura, visualização 3D e desenvolvimento digital para criar projetos coerentes, do primeiro traço ao produto final.</p>
+      <div class="cta">
+        <a href="#portfolio" class="btn" data-i18n="hero.cta1">Ver projetos</a>
+        <a href="#contacto" class="btn btn-ghost" data-i18n="hero.cta2">Pedir orçamento</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicos" class="section">
+    <div class="container">
+      <p class="eyebrow" data-i18n="services.eyebrow">O que fazemos</p>
+      <h2 data-i18n="services.title">Serviços</h2>
+      <div class="grid cards">
+        <article class="card reveal">
+          <div class="num">01</div>
+          <h3 data-i18n="s1.t">Arquitetura</h3>
+          <p data-i18n="s1.d">Projeto de habitação, comércio e reabilitação — do estudo prévio ao projeto de execução.</p>
+        </article>
+        <article class="card reveal">
+          <div class="num">02</div>
+          <h3 data-i18n="s2.t">Modelação 3D & Renderização</h3>
+          <p data-i18n="s2.d">Imagens fotorrealistas, vídeos e walkthroughs que mostram o projeto antes de existir.</p>
+        </article>
+        <article class="card reveal">
+          <div class="num">03</div>
+          <h3 data-i18n="s3.t">Desenvolvimento de Software</h3>
+          <p data-i18n="s3.d">Aplicações web, desktop e mobile à medida, das ferramentas internas a produtos completos.</p>
+        </article>
+        <article class="card reveal">
+          <div class="num">04</div>
+          <h3 data-i18n="s4.t">Web Design</h3>
+          <p data-i18n="s4.d">Websites rápidos, elegantes e otimizados, com identidade visual alinhada à sua marca.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="section alt">
+    <div class="container">
+      <p class="eyebrow" data-i18n="port.eyebrow">Trabalho selecionado</p>
+      <h2 data-i18n="port.title">Portfólio</h2>
+      <div class="filters" id="filters">
+        <button class="active" data-filter="all" data-i18n="f.all">Todos</button>
+        <button data-filter="arq" data-i18n="f.arq">Arquitetura</button>
+        <button data-filter="3d" data-i18n="f.3d">3D</button>
+        <button data-filter="sw" data-i18n="f.sw">Software</button>
+        <button data-filter="web" data-i18n="f.web">Web</button>
+      </div>
+      <!-- Os projetos vêm de js/projects.js e do modo de edição (abra o site com #edit) -->
+      <div class="grid work" id="work"></div>
+    </div>
+  </section>
+
+  <section id="processo" class="section">
+    <div class="container">
+      <p class="eyebrow" data-i18n="proc.eyebrow">Como trabalhamos</p>
+      <h2 data-i18n="proc.title">Processo</h2>
+      <ol class="steps">
+        <li class="reveal"><b>01</b><h3 data-i18n="p1.t">Conversa</h3><p data-i18n="p1.d">Percebemos objetivos, prazos e orçamento.</p></li>
+        <li class="reveal"><b>02</b><h3 data-i18n="p2.t">Conceito</h3><p data-i18n="p2.d">Esboços, referências e proposta de direção.</p></li>
+        <li class="reveal"><b>03</b><h3 data-i18n="p3.t">Desenvolvimento</h3><p data-i18n="p3.d">Projeto, modelação ou código, com revisões regulares.</p></li>
+        <li class="reveal"><b>04</b><h3 data-i18n="p4.t">Entrega</h3><p data-i18n="p4.d">Ficheiros finais, documentação e acompanhamento.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sobre" class="section alt">
+    <div class="container about">
+      <div>
+        <p class="eyebrow" data-i18n="about.eyebrow">Sobre nós</p>
+        <h2 data-i18n="about.title">Um estúdio, várias disciplinas.</h2>
+      </div>
+      <div>
+        <p data-i18n="about.p1">A Arkeido nasceu da convicção de que o design de espaços e o design digital partilham a mesma lógica: clareza, função e detalhe.</p>
+        <p data-i18n="about.p2">Trabalhar arquitetura, 3D, software e web sob o mesmo teto permite entregar projetos consistentes, com menos ruído entre equipas e mais qualidade no resultado.</p>
+        <ul class="stats">
+          <li><strong>4</strong><span data-i18n="stat1">áreas de atuação</span></li>
+          <li><strong>100%</strong><span data-i18n="stat2">à medida</span></li>
+          <li><strong>1</strong><span data-i18n="stat3">interlocutor</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="section">
+    <div class="container contact">
+      <div>
+        <p class="eyebrow" data-i18n="contact.eyebrow">Vamos conversar</p>
+        <h2 data-i18n="contact.title">Tem um projeto em mente?</h2>
+        <p class="lead" data-i18n="contact.lead">Conte-nos a sua ideia. Respondemos em 1–2 dias úteis.</p>
+        <p class="info">
+          <a href="mailto:geral@arkeido.com">geral@arkeido.com</a>
+        </p>
+      </div>
+      <form id="form" novalidate>
+        <label><span data-i18n="form.name">Nome</span><input name="name" required></label>
+        <label><span data-i18n="form.email">Email</span><input type="email" name="email" required></label>
+        <label><span data-i18n="form.service">Serviço</span>
+          <select name="service">
+            <option data-i18n="s1.t">Arquitetura</option>
+            <option data-i18n="s2.t">Modelação 3D & Renderização</option>
+            <option data-i18n="s3.t">Desenvolvimento de Software</option>
+            <option data-i18n="s4.t">Web Design</option>
+          </select>
+        </label>
+        <label><span data-i18n="form.msg">Mensagem</span><textarea name="message" rows="5" required></textarea></label>
+        <button class="btn" type="submit" data-i18n="form.send">Enviar mensagem</button>
+        <p class="note" id="note" hidden></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <span>© <span id="year"></span> Arkeido</span>
+    <span data-i18n="footer.tag">Arquitetura · 3D · Software · Web</span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/projects.js"></script>
+<script src="js/portfolio.js"></script>
+<script src="js/editor.js"></script>
+</body>
+</html>
