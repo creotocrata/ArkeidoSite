@@ -4,6 +4,7 @@
 (function () {
   var L = {
     pt: {
+      lockT: 'Área reservada', lockPw: 'Palavra-passe', lockGo: 'Entrar', lockBad: 'Palavra-passe errada.', lockNo: 'Este navegador não suporta a verificação. Abra o site por https://.',
       mode: 'Modo de edição', add: '+ Novo projeto', exp: 'Exportar', imp: 'Importar', reset: 'Repor original', exit: 'Sair',
       hint: 'As alterações ficam guardadas neste navegador. Use «Exportar» para as publicar.',
       newT: 'Novo projeto', editT: 'Editar projeto', title: 'Título', cat: 'Categoria', dPt: 'Descrição (PT)', dEn: 'Descrição (EN)',
@@ -16,6 +17,7 @@
       expDone: 'Ficheiro projects.js descarregado. Substitua js/projects.js do site por ele para publicar.'
     },
     en: {
+      lockT: 'Private area', lockPw: 'Password', lockGo: 'Enter', lockBad: 'Wrong password.', lockNo: 'This browser cannot verify the password. Open the site over https://.',
       mode: 'Edit mode', add: '+ New project', exp: 'Export', imp: 'Import', reset: 'Restore original', exit: 'Exit',
       hint: 'Changes are saved in this browser. Use "Export" to publish them.',
       newT: 'New project', editT: 'Edit project', title: 'Title', cat: 'Category', dPt: 'Description (PT)', dEn: 'Description (EN)',
@@ -228,6 +230,7 @@
 
   function toggle(v) {
     on = v;
+    if (!v) setUnlocked(false);
     document.body.classList.toggle('editing', on);
     if (on && !bar) { buildBar(); buildDialog(); }
     if (bar) bar.hidden = !on;
@@ -237,7 +240,64 @@
   }
 
   document.addEventListener('langchange', function () { if (on) labels(); });
-  addEventListener('hashchange', function () { if (location.hash === '#edit') toggle(true); });
-  addEventListener('keydown', function (e) { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') { e.preventDefault(); toggle(!on); } });
-  if (location.hash === '#edit' || /[?&]edit\b/.test(location.search)) toggle(true);
+
+  /* ---------- palavra-passe ---------- */
+  // Guardamos apenas o hash (PBKDF2-SHA256); a palavra-passe em si não está no código.
+  var LOCK = { salt: 'e6b1a27dfd0d9050a64dab2b725c4b81', iter: 210000, hash: '89d34f533c4d472d8f271e310c24f78026ea9a087de7330f18a36e8c8d4af92e' };
+  var fails = 0;
+
+  function hex(b) { return Array.prototype.map.call(new Uint8Array(b), function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); }
+  function unhex(t) { var a = new Uint8Array(t.length / 2); for (var i = 0; i < a.length; i++) a[i] = parseInt(t.substr(i * 2, 2), 16); return a; }
+  function check(pw) {
+    return crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits'])
+      .then(function (k) { return crypto.subtle.deriveBits({ name: 'PBKDF2', salt: unhex(LOCK.salt), iterations: LOCK.iter, hash: 'SHA-256' }, k, 256); })
+      .then(function (b) { return hex(b) === LOCK.hash; });
+  }
+  function isUnlocked() { try { return sessionStorage.getItem('arkeido.unlock') === '1'; } catch (e) { return false; } }
+  function setUnlocked(v) { try { v ? sessionStorage.setItem('arkeido.unlock', '1') : sessionStorage.removeItem('arkeido.unlock'); } catch (e) {} }
+
+  function askPassword() {
+    return new Promise(function (resolve) {
+      var d = h('dialog', { class: 'ed-dlg ed-lock' });
+      var f = h('form', { method: 'dialog' });
+      var inp = h('input', { type: 'password', autocomplete: 'current-password', 'aria-label': s('lockPw') });
+      var err = h('p', { class: 'ed-err', hidden: '' });
+      f.appendChild(h('h3', { text: s('lockT') }));
+      f.appendChild(field('lockPw', inp));
+      f.querySelector('[data-k]').textContent = s('lockPw');
+      f.appendChild(err);
+      var go = h('button', { type: 'submit', class: 'ed-btn primary', text: s('lockGo') });
+      f.appendChild(h('div', { class: 'ed-actions' }, [go]));
+      d.appendChild(f); document.body.appendChild(d);
+      var done = false;
+      function finish(ok) { if (done) return; done = true; if (d.open) d.close(); d.remove(); resolve(ok); }
+      d.addEventListener('cancel', function () { finish(false); });
+      d.addEventListener('close', function () { finish(false); });
+      f.addEventListener('submit', function (e) {
+        e.preventDefault(); go.disabled = true;
+        var wait = Math.min(fails, 5) * 1000; // abranda tentativas repetidas
+        setTimeout(function () {
+          check(inp.value).then(function (ok) {
+            if (ok) { fails = 0; setUnlocked(true); finish(true); return; }
+            fails++; err.textContent = s('lockBad'); err.hidden = false; inp.value = ''; go.disabled = false; inp.focus();
+          }).catch(function () { err.textContent = s('lockNo'); err.hidden = false; go.disabled = false; });
+        }, wait);
+      });
+      d.showModal(); inp.focus();
+    });
+  }
+
+  function clearHash() { if (/edit/.test(location.hash + location.search)) history.replaceState(null, '', location.pathname); }
+
+  // ponto único de entrada no modo de edição
+  function request() {
+    if (on) { toggle(false); return; }
+    if (isUnlocked()) { toggle(true); return; }
+    if (!(window.crypto && crypto.subtle)) { alert(s('lockNo')); clearHash(); return; }
+    askPassword().then(function (ok) { if (ok) toggle(true); else clearHash(); });
+  }
+
+  addEventListener('hashchange', function () { if (location.hash === '#edit') request(); });
+  addEventListener('keydown', function (e) { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') { e.preventDefault(); request(); } });
+  if (location.hash === '#edit' || /[?&]edit/.test(location.search)) request();
 })();
