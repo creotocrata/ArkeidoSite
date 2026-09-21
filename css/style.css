@@ -168,3 +168,10 @@ body.editing .item{outline:1px dashed var(--accent);outline-offset:-1px}
 .ed-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
 .ed-err{color:#e5484d;font-size:.85rem}
 @media(max-width:860px){.ed-bar{border-radius:14px}.ed-bar .ed-btn{padding:6px 12px}}
+
+/* espaços reservados */
+.item.placeholder{border-style:dashed;background:transparent}
+.item.placeholder:hover{border-color:var(--line)}
+.ph-box{aspect-ratio:4/3;display:grid;place-items:center;font:300 3rem var(--f-head);color:var(--line)}
+.item.placeholder .meta{background:transparent}
+.item.placeholder h4{color:var(--muted);font-weight:400}

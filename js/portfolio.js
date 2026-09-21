@@ -54,8 +54,17 @@
 
   function buildItem(p) {
     var art = el('article', 'item');
-    art.dataset.cat = p.cat; art.dataset.id = p.id;
-    if (filter !== 'all' && p.cat !== filter) art.classList.add('hide');
+    art.dataset.cat = p.placeholder ? '' : p.cat; art.dataset.id = p.id;
+    if (filter !== 'all' && art.dataset.cat !== filter) art.classList.add('hide');
+    if (p.placeholder) {
+      art.classList.add('placeholder');
+      var ph = el('div', 'ilink');
+      ph.appendChild(el('div', 'ph-box', '+'));
+      ph.appendChild(el('div', 'meta')).appendChild(el('h4', null, t('port.soon')));
+      art.appendChild(ph);
+      if (editing) art.appendChild(buildTools(p, true));
+      return art;
+    }
 
     var url = safeUrl(p.url);
     var a = el('a', 'ilink');
@@ -82,15 +91,17 @@
     a.appendChild(meta);
     art.appendChild(a);
 
-    if (editing) {
-      var tools = el('div', 'tools');
-      tools.appendChild(tool(tt('Mover para trás', 'Move earlier'), '◀', function () { move(p.id, -1); }));
-      tools.appendChild(tool(tt('Mover para a frente', 'Move later'), '▶', function () { move(p.id, 1); }));
-      tools.appendChild(tool(tt('Editar', 'Edit'), '✎', function () { window.Editor && Editor.open(p.id); }));
-      tools.appendChild(tool(tt('Apagar', 'Delete'), '✕', function () { remove(p.id); }));
-      art.appendChild(tools);
-    }
+    if (editing) art.appendChild(buildTools(p));
     return art;
+  }
+
+  function buildTools(p) {
+    var tools = el('div', 'tools');
+    tools.appendChild(tool(tt('Mover para trás', 'Move earlier'), '◀', function () { move(p.id, -1); }));
+    tools.appendChild(tool(tt('Mover para a frente', 'Move later'), '▶', function () { move(p.id, 1); }));
+    tools.appendChild(tool(tt('Editar', 'Edit'), '✎', function () { window.Editor && Editor.open(p.id); }));
+    tools.appendChild(tool(tt('Apagar', 'Delete'), '✕', function () { remove(p.id); }));
+    return tools;
   }
 
   function render() {
@@ -106,7 +117,7 @@
   function move(id, dir) {
     var i = indexOf(id); if (i < 0) return;
     var j = i + dir;
-    while (j >= 0 && j < list.length && filter !== 'all' && list[j].cat !== filter) j += dir;
+    while (j >= 0 && j < list.length && filter !== 'all' && (list[j].placeholder || list[j].cat !== filter)) j += dir;
     if (j < 0 || j >= list.length) return;
     var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
     save(); render();
@@ -114,7 +125,8 @@
 
   function remove(id) {
     var i = indexOf(id); if (i < 0) return;
-    if (!confirm(tt('Apagar «' + list[i].title + '»?', 'Delete "' + list[i].title + '"?'))) return;
+    var nm = list[i].title || tt('este espaço', 'this slot');
+    if (!confirm(tt('Apagar «' + nm + '»?', 'Delete "' + nm + '"?'))) return;
     list.splice(i, 1); save(); render();
   }
 

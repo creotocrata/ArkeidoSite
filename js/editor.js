@@ -154,7 +154,7 @@
     cur = id ? Portfolio.find(id) : null;
     st = { grad: cur ? cur.grad || 1 : 1, img: cur ? cur.img || '' : '' };
     var f = form.elements;
-    f.title.value = cur ? cur.title : '';
+    f.title.value = cur ? cur.title || '' : '';
     f.cat.value = cur ? cur.cat : 'web';
     f.dPt.value = cur && cur.desc ? cur.desc.pt || '' : '';
     f.dEn.value = cur && cur.desc ? cur.desc.en || '' : '';

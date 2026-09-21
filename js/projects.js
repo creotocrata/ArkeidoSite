@@ -22,9 +22,6 @@ window.PROJECTS = [
     img: 'img/thumb-cervejaria.svg', url: 'demos/cervejaria/index.html',
     desc: { pt: 'Website de cervejaria artesanal com cervejas, visitas e loja (PT/EN/ES).', en: 'Craft brewery website with beers, tours and shop (PT/EN/ES).' }
   },
-  { id: 'p-casa-atlantica', cat: 'arq', title: 'Casa Atlântica', grad: 1, img: '', url: '', desc: { pt: '', en: '' } },
-  { id: 'p-loft-interior', cat: '3d', title: 'Loft Interior', grad: 2, img: '', url: '', desc: { pt: '', en: '' } },
-  { id: 'p-gestao-obras', cat: 'sw', title: 'Gestão de Obras', grad: 3, img: '', url: '', desc: { pt: '', en: '' } },
-  { id: 'p-villa-serra', cat: '3d', title: 'Villa Serra', grad: 5, img: '', url: '', desc: { pt: '', en: '' } },
-  { id: 'p-reabilitacao-baixa', cat: 'arq', title: 'Reabilitação Baixa', grad: 6, img: '', url: '', desc: { pt: '', en: '' } }
+  { id: 'ph-1', placeholder: true, cat: 'web', title: '', grad: 1, img: '', url: '', desc: { pt: '', en: '' } },
+  { id: 'ph-2', placeholder: true, cat: 'web', title: '', grad: 1, img: '', url: '', desc: { pt: '', en: '' } }
 ];
