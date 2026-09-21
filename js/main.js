@@ -11,7 +11,7 @@ const dict = {
     's3.t':'Desenvolvimento de Software','s3.d':'Aplicações web, desktop e mobile à medida, das ferramentas internas a produtos completos.',
     's4.t':'Web Design','s4.d':'Websites rápidos, elegantes e otimizados, com identidade visual alinhada à sua marca.',
     'port.eyebrow':'Trabalho selecionado','port.title':'Portfólio','port.soon':'Novo projeto em breve','port.visit':'Visitar projeto',
-    'f.all':'Todos','f.arq':'Arquitetura','f.3d':'3D','f.sw':'Software','f.web':'Web',
+    'f.all':'Todos','f.arq':'Arquitetura','f.3d':'3D','f.sw':'Software','f.web':'Web','f.ads':'Publicidade & Product Placement',
     'proc.eyebrow':'Como trabalhamos','proc.title':'Processo',
     'p1.t':'Conversa','p1.d':'Percebemos objetivos, prazos e orçamento.',
     'p2.t':'Conceito','p2.d':'Esboços, referências e proposta de direção.',
@@ -38,7 +38,7 @@ const dict = {
     's3.t':'Software Development','s3.d':'Custom web, desktop and mobile applications, from internal tools to full products.',
     's4.t':'Web Design','s4.d':'Fast, elegant, optimized websites with a visual identity aligned to your brand.',
     'port.eyebrow':'Selected work','port.title':'Portfolio','port.soon':'New project coming soon','port.visit':'Visit project',
-    'f.all':'All','f.arq':'Architecture','f.3d':'3D','f.sw':'Software','f.web':'Web',
+    'f.all':'All','f.arq':'Architecture','f.3d':'3D','f.sw':'Software','f.web':'Web','f.ads':'Advertising & Product Placement',
     'proc.eyebrow':'How we work','proc.title':'Process',
     'p1.t':'Talk','p1.d':'We understand goals, timelines and budget.',
     'p2.t':'Concept','p2.d':'Sketches, references and a proposed direction.',
@@ -56,7 +56,7 @@ const dict = {
 };
 
 let lang = 'pt';
-try { lang = localStorage.getItem('lang') || (navigator.language.startsWith('en') ? 'en' : 'pt'); } catch (e) {}
+try { lang = localStorage.getItem('lang') || 'pt'; } catch (e) {}
 
 function setLang(l) {
   lang = l;

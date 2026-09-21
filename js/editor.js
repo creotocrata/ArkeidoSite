@@ -5,7 +5,8 @@
   var L = {
     pt: {
       lockT: 'Área reservada', lockPw: 'Palavra-passe', lockGo: 'Entrar', lockBad: 'Palavra-passe errada.', lockNo: 'Este navegador não suporta a verificação. Abra o site por https://.',
-      more: 'Mais imagens (galeria)', addMore: 'Adicionar imagens',
+      more: 'Mais imagens (galeria)', addMore: 'Adicionar imagens', capPt: 'Legenda (PT)', capEn: 'Legenda (EN)',
+      vids: 'Vídeos (um link por linha)', vidsPh: 'Link do YouTube, Vimeo ou ficheiro .mp4', vidsBad: 'Link de vídeo não reconhecido. Use YouTube, Vimeo ou um endereço terminado em .mp4/.webm:',
       mode: 'Modo de edição', add: '+ Novo projeto', pub: 'Publicar', reset: 'Descartar alterações', exit: 'Sair',
       hint: 'As alterações só aparecem no site depois de clicar em «Publicar».',
       pubBusy: 'A publicar…', pubOk: 'Publicado! O site mostra as alterações dentro de alguns minutos.',
@@ -24,7 +25,8 @@
     },
     en: {
       lockT: 'Private area', lockPw: 'Password', lockGo: 'Enter', lockBad: 'Wrong password.', lockNo: 'This browser cannot verify the password. Open the site over https://.',
-      more: 'More images (gallery)', addMore: 'Add images',
+      more: 'More images (gallery)', addMore: 'Add images', capPt: 'Caption (PT)', capEn: 'Caption (EN)',
+      vids: 'Videos (one link per line)', vidsPh: 'YouTube, Vimeo or .mp4 file link', vidsBad: 'Video link not recognised. Use YouTube, Vimeo or an address ending in .mp4/.webm:',
       mode: 'Edit mode', add: '+ New project', pub: 'Publish', reset: 'Discard changes', exit: 'Exit',
       hint: 'Changes only show on the site after you click "Publish".',
       pubBusy: 'Publishing…', pubOk: 'Published! The site shows the changes within a few minutes.',
@@ -87,7 +89,7 @@
 
     form.appendChild(field('title', h('input', { name: 'title', maxlength: '80', autocomplete: 'off' })));
     var sel = h('select', { name: 'cat' });
-    ['arq', '3d', 'sw', 'web'].forEach(function (c) { sel.appendChild(h('option', { value: c, 'data-cat': c })); });
+    ['arq', '3d', 'sw', 'web', 'ads'].forEach(function (c) { sel.appendChild(h('option', { value: c, 'data-cat': c })); });
     form.appendChild(field('cat', sel));
     form.appendChild(field('dPt', h('textarea', { name: 'dPt', rows: '2', maxlength: '300' })));
     form.appendChild(field('dEn', h('textarea', { name: 'dEn', rows: '2', maxlength: '300' })));
@@ -101,7 +103,9 @@
     row.appendChild(btn('ed-btn', 'remove', function () { st.img = ''; refreshImg(); }));
     var path = h('input', { name: 'imgPath', maxlength: '500', autocomplete: 'off' });
     path.addEventListener('input', function () { st.img = path.value.trim(); refreshPreview(); });
-    var imgBox = h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'img' }), prev, row, file, field('imgPath', path)]);
+    var coverCap = capInputs(function () { return st.imgCap; });
+    dlg._coverCap = coverCap;
+    var imgBox = h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'img' }), prev, row, file, field('imgPath', path), coverCap]);
     form.appendChild(imgBox);
     file.addEventListener('change', function () { if (file.files[0]) readImage(file.files[0]); file.value = ''; });
 
@@ -110,10 +114,11 @@
     var gfile = h('input', { type: 'file', accept: 'image/*', multiple: '', hidden: '' });
     gfile.addEventListener('change', function () {
       var fs = Array.prototype.slice.call(gfile.files); gfile.value = '';
-      Promise.all(fs.map(compress)).then(function (ds) { ds.forEach(function (d) { if (d) st.imgs.push(d); }); refreshGallery(); });
+      Promise.all(fs.map(compress)).then(function (ds) { ds.forEach(function (d) { if (d) st.imgs.push({ src: d, cap: {} }); }); refreshGallery(); });
     });
     form.appendChild(h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'more' }), gal, h('div', { class: 'ed-row' }, [btn('ed-btn', 'addMore', function () { gfile.click(); })]), gfile]));
     dlg._gal = gal;
+    form.appendChild(field('vids', h('textarea', { name: 'vids', rows: '3', maxlength: '1000', autocomplete: 'off' })));
 
     // cores
     var sw = h('div', { class: 'ed-sw' });
@@ -175,41 +180,67 @@
   }
   function readImage(f) { compress(f).then(function (d) { if (d) { st.img = d; refreshImg(); } }); }
 
+  // dois campos discretos (PT/EN) ligados a um objeto {pt, en}
+  function capInputs(getObj) {
+    var box = h('div', { class: 'ed-caps' });
+    ['pt', 'en'].forEach(function (l) {
+      var i = h('input', { maxlength: '140', autocomplete: 'off', 'data-cap': l });
+      i.addEventListener('input', function () { getObj()[l] = i.value; });
+      box.appendChild(i);
+    });
+    return box;
+  }
+  function fillCaps(box, obj) {
+    Array.prototype.forEach.call(box.children, function (i) { i.value = obj[i.dataset.cap] || ''; i.placeholder = s(i.dataset.cap === 'pt' ? 'capPt' : 'capEn'); });
+  }
+
   function refreshGallery() {
     var g = dlg._gal; g.textContent = '';
-    st.imgs.forEach(function (src, i) {
+    st.imgs.forEach(function (it, i) {
       var w = h('div', { class: 'ed-gi' });
-      var im = h('img', { alt: '' }); im.src = src;
+      var im = h('img', { alt: '' }); im.src = it.src;
       var x = h('button', { type: 'button', 'aria-label': 'Remover', text: '✕' });
       x.addEventListener('click', function () { st.imgs.splice(i, 1); refreshGallery(); });
-      w.appendChild(im); w.appendChild(x); g.appendChild(w);
+      var caps = capInputs(function () { return it.cap; }); fillCaps(caps, it.cap);
+      w.appendChild(im); w.appendChild(caps); w.appendChild(x); g.appendChild(w);
     });
   }
 
   function openForm(id) {
     cur = id ? Portfolio.find(id) : null;
-    st = { grad: cur ? cur.grad || 1 : 1, img: cur ? cur.img || '' : '', imgs: cur && cur.imgs ? cur.imgs.slice() : [] };
+    st = {
+      grad: cur ? cur.grad || 1 : 1, img: cur ? cur.img || '' : '',
+      imgCap: cur && cur.imgCap ? JSON.parse(JSON.stringify(cur.imgCap)) : {},
+      imgs: cur && cur.imgs ? cur.imgs.map(function (x) { return typeof x === 'string' ? { src: x, cap: {} } : { src: x.src, cap: Object.assign({}, x.cap) }; }) : []
+    };
     var f = form.elements;
     f.title.value = cur ? cur.title || '' : '';
     f.cat.value = cur ? cur.cat : 'web';
     f.dPt.value = cur && cur.desc ? cur.desc.pt || '' : '';
     f.dEn.value = cur && cur.desc ? cur.desc.en || '' : '';
     f.url.value = cur ? cur.url || '' : '';
+    f.vids.value = cur && cur.videos ? cur.videos.join('\n') : '';
     form.querySelector('.ed-err').hidden = true;
     labels();
     refreshImg();
+    fillCaps(dlg._coverCap, st.imgCap);
     refreshGallery();
     dlg.showModal();
     f.title.focus();
   }
   window.Editor = { open: openForm };
 
+  function capOrUndef(c) { c = { pt: (c.pt || '').trim(), en: (c.en || '').trim() }; return c.pt || c.en ? c : undefined; }
+
   function submit() {
     var f = form.elements, err = form.querySelector('.ed-err');
     if (!f.title.value.trim()) { err.textContent = s('needTitle'); err.hidden = false; f.title.focus(); return; }
+    var vids = f.vids.value.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+    var bad = vids.filter(function (x) { return !Portfolio.videoInfo(x); });
+    if (bad.length) { err.textContent = s('vidsBad') + ' ' + bad[0]; err.hidden = false; f.vids.focus(); return; }
     var p = {
       id: cur ? cur.id : 'p-' + Date.now().toString(36),
-      cat: f.cat.value, title: f.title.value.trim(), grad: st.grad, img: st.img, imgs: st.imgs.slice(), url: f.url.value.trim(),
+      cat: f.cat.value, title: f.title.value.trim(), grad: st.grad, img: st.img, imgCap: capOrUndef(st.imgCap), imgs: st.imgs.map(function (it) { return capOrUndef(it.cap) ? { src: it.src, cap: capOrUndef(it.cap) } : it.src; }), videos: vids, url: f.url.value.trim(),
       desc: { pt: f.dPt.value.trim(), en: f.dEn.value.trim() }
     };
     var ok = Portfolio.upsert(p);
@@ -278,7 +309,10 @@
       for (var i = 0; i < list.length; i++) {
         var p = list[i];
         p.img = await uploadData(p.img, p, token);
-        for (var j = 0; p.imgs && j < p.imgs.length; j++) p.imgs[j] = await uploadData(p.imgs[j], p, token);
+        for (var j = 0; p.imgs && j < p.imgs.length; j++) {
+          if (typeof p.imgs[j] === 'string') p.imgs[j] = await uploadData(p.imgs[j], p, token);
+          else p.imgs[j].src = await uploadData(p.imgs[j].src, p, token);
+        }
       }
       var cur = await gh('GET', 'js/projects.js', null, token);
       if (!cur.ok) throw cur;
@@ -304,7 +338,7 @@
       });
     });
     if (dlg) dlg.querySelectorAll('option[data-cat]').forEach(function (o) { o.textContent = dict[lang]['f.' + o.dataset.cat]; });
-    if (dlg) { form.elements.url.placeholder = s('urlPh'); }
+    if (dlg) { form.elements.url.placeholder = s('urlPh'); form.elements.vids.placeholder = s('vidsPh'); fillCaps(dlg._coverCap, st.imgCap || {}); }
   }
 
   function toggle(v) {
