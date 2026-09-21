@@ -5,6 +5,7 @@
   var L = {
     pt: {
       lockT: 'Área reservada', lockPw: 'Palavra-passe', lockGo: 'Entrar', lockBad: 'Palavra-passe errada.', lockNo: 'Este navegador não suporta a verificação. Abra o site por https://.',
+      more: 'Mais imagens (galeria)', addMore: 'Adicionar imagens',
       mode: 'Modo de edição', add: '+ Novo projeto', pub: 'Publicar', reset: 'Descartar alterações', exit: 'Sair',
       hint: 'As alterações só aparecem no site depois de clicar em «Publicar».',
       pubBusy: 'A publicar…', pubOk: 'Publicado! O site mostra as alterações dentro de alguns minutos.',
@@ -23,6 +24,7 @@
     },
     en: {
       lockT: 'Private area', lockPw: 'Password', lockGo: 'Enter', lockBad: 'Wrong password.', lockNo: 'This browser cannot verify the password. Open the site over https://.',
+      more: 'More images (gallery)', addMore: 'Add images',
       mode: 'Edit mode', add: '+ New project', pub: 'Publish', reset: 'Discard changes', exit: 'Exit',
       hint: 'Changes only show on the site after you click "Publish".',
       pubBusy: 'Publishing…', pubOk: 'Published! The site shows the changes within a few minutes.',
@@ -103,6 +105,16 @@
     form.appendChild(imgBox);
     file.addEventListener('change', function () { if (file.files[0]) readImage(file.files[0]); file.value = ''; });
 
+    // galeria: várias imagens
+    var gal = h('div', { class: 'ed-gal' });
+    var gfile = h('input', { type: 'file', accept: 'image/*', multiple: '', hidden: '' });
+    gfile.addEventListener('change', function () {
+      var fs = Array.prototype.slice.call(gfile.files); gfile.value = '';
+      Promise.all(fs.map(compress)).then(function (ds) { ds.forEach(function (d) { if (d) st.imgs.push(d); }); refreshGallery(); });
+    });
+    form.appendChild(h('div', { class: 'ed-f' }, [h('span', { 'data-k': 'more' }), gal, h('div', { class: 'ed-row' }, [btn('ed-btn', 'addMore', function () { gfile.click(); })]), gfile]));
+    dlg._gal = gal;
+
     // cores
     var sw = h('div', { class: 'ed-sw' });
     for (var i = 1; i <= 6; i++) (function (n) {
@@ -141,26 +153,42 @@
     refreshPreview();
   }
 
-  // redimensiona para no máximo 1200px e comprime (o localStorage tem pouco espaço)
-  function readImage(f) {
-    var r = new FileReader();
-    r.onload = function () {
-      if (/svg/.test(f.type)) { st.img = r.result; refreshImg(); return; }
-      var im = new Image();
-      im.onload = function () {
-        var k = Math.min(1, 1200 / im.width), c = document.createElement('canvas');
-        c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
-        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
-        st.img = c.toDataURL('image/jpeg', .82); refreshImg();
+  // redimensiona para no máximo 1400px e comprime (o navegador guarda pouco espaço)
+  function compress(f) {
+    return new Promise(function (resolve) {
+      var r = new FileReader();
+      r.onload = function () {
+        if (/svg/.test(f.type)) { resolve(r.result); return; }
+        var im = new Image();
+        im.onload = function () {
+          var k = Math.min(1, 1400 / im.width), c = document.createElement('canvas');
+          c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+          c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+          resolve(c.toDataURL('image/jpeg', .8));
+        };
+        im.onerror = function () { resolve(''); };
+        im.src = r.result;
       };
-      im.src = r.result;
-    };
-    r.readAsDataURL(f);
+      r.onerror = function () { resolve(''); };
+      r.readAsDataURL(f);
+    });
+  }
+  function readImage(f) { compress(f).then(function (d) { if (d) { st.img = d; refreshImg(); } }); }
+
+  function refreshGallery() {
+    var g = dlg._gal; g.textContent = '';
+    st.imgs.forEach(function (src, i) {
+      var w = h('div', { class: 'ed-gi' });
+      var im = h('img', { alt: '' }); im.src = src;
+      var x = h('button', { type: 'button', 'aria-label': 'Remover', text: '✕' });
+      x.addEventListener('click', function () { st.imgs.splice(i, 1); refreshGallery(); });
+      w.appendChild(im); w.appendChild(x); g.appendChild(w);
+    });
   }
 
   function openForm(id) {
     cur = id ? Portfolio.find(id) : null;
-    st = { grad: cur ? cur.grad || 1 : 1, img: cur ? cur.img || '' : '' };
+    st = { grad: cur ? cur.grad || 1 : 1, img: cur ? cur.img || '' : '', imgs: cur && cur.imgs ? cur.imgs.slice() : [] };
     var f = form.elements;
     f.title.value = cur ? cur.title || '' : '';
     f.cat.value = cur ? cur.cat : 'web';
@@ -170,6 +198,7 @@
     form.querySelector('.ed-err').hidden = true;
     labels();
     refreshImg();
+    refreshGallery();
     dlg.showModal();
     f.title.focus();
   }
@@ -180,7 +209,7 @@
     if (!f.title.value.trim()) { err.textContent = s('needTitle'); err.hidden = false; f.title.focus(); return; }
     var p = {
       id: cur ? cur.id : 'p-' + Date.now().toString(36),
-      cat: f.cat.value, title: f.title.value.trim(), grad: st.grad, img: st.img, url: f.url.value.trim(),
+      cat: f.cat.value, title: f.title.value.trim(), grad: st.grad, img: st.img, imgs: st.imgs.slice(), url: f.url.value.trim(),
       desc: { pt: f.dPt.value.trim(), en: f.dEn.value.trim() }
     };
     var ok = Portfolio.upsert(p);
@@ -227,6 +256,17 @@
     });
   }
 
+  var uid = 0;
+  // se a imagem veio do computador (data URL), grava-a em img/ e devolve o caminho; senão devolve-a igual
+  async function uploadData(src, p, token) {
+    var m = /^data:image\/(png|jpe?g|webp|gif|svg\+xml);base64,(.+)$/.exec(src || '');
+    if (!m) return src;
+    var name = 'img/' + p.id + '-' + Date.now().toString(36) + (uid++) + '.' + m[1].replace('jpeg', 'jpg').replace('svg+xml', 'svg');
+    var up = await gh('PUT', name, { message: 'Imagem: ' + (p.title || p.id), content: m[2], branch: BRANCH }, token);
+    if (!up.ok) throw up;
+    return name;
+  }
+
   async function publish(button) {
     var token = getToken();
     if (!token) { token = await askToken(); if (!token) return; setToken(token); }
@@ -236,12 +276,9 @@
       var list = JSON.parse(JSON.stringify(Portfolio.get()));
       // imagens carregadas do computador passam a ficheiros em img/
       for (var i = 0; i < list.length; i++) {
-        var p = list[i], m = /^data:image\/(png|jpe?g|webp|gif|svg\+xml);base64,(.+)$/.exec(p.img || '');
-        if (!m) continue;
-        var name = 'img/' + p.id + '-' + Date.now().toString(36) + '.' + m[1].replace('jpeg', 'jpg').replace('svg+xml', 'svg');
-        var up = await gh('PUT', name, { message: 'Imagem: ' + (p.title || p.id), content: m[2], branch: BRANCH }, token);
-        if (!up.ok) throw up;
-        p.img = name;
+        var p = list[i];
+        p.img = await uploadData(p.img, p, token);
+        for (var j = 0; p.imgs && j < p.imgs.length; j++) p.imgs[j] = await uploadData(p.imgs[j], p, token);
       }
       var cur = await gh('GET', 'js/projects.js', null, token);
       if (!cur.ok) throw cur;
