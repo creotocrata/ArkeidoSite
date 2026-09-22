@@ -52,11 +52,58 @@ const dict = {
     'form.name':'Name','form.email':'Email','form.service':'Service','form.msg':'Message','form.send':'Send message',
     'form.err':'Please fill in all fields correctly.','form.ok':'Opening your email client…',
     'footer.tag':'Architecture · 3D · Software · Web'
+  },
+  es: {
+    'nav.services':'Servicios','nav.portfolio':'Portafolio','nav.process':'Proceso','nav.about':'Nosotros','nav.contact':'Contacto',
+    'hero.eyebrow':'Arquitectura · 3D · Software · Web',
+    'hero.title':'Damos forma a <em>ideas</em>,<br>del espacio a la pantalla.',
+    'hero.lead':'Somos un estudio que combina arquitectura, visualización 3D y desarrollo digital para crear proyectos coherentes, desde el primer boceto hasta el producto final.',
+    'hero.cta1':'Ver proyectos','hero.cta2':'Pedir presupuesto',
+    'services.eyebrow':'Qué hacemos','services.title':'Servicios',
+    's1.t':'Arquitectura','s1.d':'Proyectos de vivienda, comercio y rehabilitación — desde el estudio previo hasta el proyecto de ejecución.',
+    's2.t':'Modelado 3D y Renderizado','s2.d':'Imágenes fotorrealistas, vídeos y recorridos virtuales que muestran el proyecto antes de que exista.',
+    's3.t':'Desarrollo de Software','s3.d':'Aplicaciones web, de escritorio y móviles a medida, desde herramientas internas hasta productos completos.',
+    's4.t':'Diseño Web','s4.d':'Sitios web rápidos, elegantes y optimizados, con identidad visual alineada a su marca.',
+    'port.eyebrow':'Trabajo seleccionado','port.title':'Portafolio','port.soon':'Nuevo proyecto próximamente','port.visit':'Visitar proyecto',
+    'f.all':'Todos','f.arq':'Arquitectura','f.3d':'3D','f.sw':'Software','f.web':'Web','f.ads':'Publicidad y Colocación de Productos',
+    'proc.eyebrow':'Cómo trabajamos','proc.title':'Proceso',
+    'p1.t':'Conversación','p1.d':'Entendemos objetivos, plazos y presupuesto.',
+    'p2.t':'Concepto','p2.d':'Bocetos, referencias y propuesta de dirección.',
+    'p3.t':'Desarrollo','p3.d':'Proyecto, modelado o código, con revisiones periódicas.',
+    'p4.t':'Entrega','p4.d':'Archivos finales, documentación y seguimiento.',
+    'about.eyebrow':'Sobre nosotros','about.title':'Un estudio, varias disciplinas.',
+    'about.p1':'Arkeido nació de la convicción de que el diseño de espacios y el diseño digital comparten la misma lógica: claridad, función y detalle.',
+    'about.p2':'Trabajar arquitectura, 3D, software y web bajo un mismo techo permite entregar proyectos consistentes, con menos fricción entre equipos y más calidad en el resultado.',
+    'stat1':'áreas de actuación','stat2':'a medida','stat3':'interlocutor',
+    'contact.eyebrow':'Hablemos','contact.title':'¿Tiene un proyecto en mente?','contact.lead':'Cuéntenos su idea. Respondemos en 1–2 días hábiles.',
+    'form.name':'Nombre','form.email':'Email','form.service':'Servicio','form.msg':'Mensaje','form.send':'Enviar mensaje',
+    'form.err':'Complete todos los campos correctamente.','form.ok':'Abriendo su cliente de email…',
+    'footer.tag':'Arquitectura · 3D · Software · Web'
   }
 };
 
+// Países de língua portuguesa/espanhola para deteção automática por IP (via Cloudflare); resto do mundo cai em inglês
+const PT_COUNTRIES = ['PT', 'BR'];
+const ES_COUNTRIES = ['ES', 'MX', 'AR', 'CO', 'CL', 'PE', 'VE', 'EC', 'GT', 'CU', 'BO', 'DO', 'HN', 'PY', 'SV', 'NI', 'CR', 'PA', 'UY', 'PR', 'GQ'];
+
+function countryToLang(cc) {
+  if (!cc) return 'en';
+  cc = cc.toUpperCase();
+  if (PT_COUNTRIES.includes(cc)) return 'pt';
+  if (ES_COUNTRIES.includes(cc)) return 'es';
+  return 'en';
+}
+
+// O domínio corre atrás da Cloudflare, que expõe o país do visitante neste endpoint sem precisar de backend próprio
+function detectLangByCountry() {
+  return fetch('/cdn-cgi/trace', { cache: 'no-store' })
+    .then(r => r.text())
+    .then(t => countryToLang((t.match(/loc=([A-Z]{2})/) || [])[1]));
+}
+
 let lang = 'pt';
-try { lang = localStorage.getItem('lang') || 'pt'; } catch (e) {}
+let storedLang = null;
+try { storedLang = localStorage.getItem('lang'); } catch (e) {}
 
 function setLang(l) {
   lang = l;
@@ -68,7 +115,13 @@ function setLang(l) {
   document.dispatchEvent(new Event('langchange'));
 }
 document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
-setLang(lang);
+
+if (storedLang) {
+  setLang(storedLang);
+} else {
+  const timeout = new Promise(resolve => setTimeout(() => resolve('en'), 1500));
+  Promise.race([detectLangByCountry(), timeout]).then(setLang).catch(() => setLang('en'));
+}
 
 // nav
 const nav = document.getElementById('nav'), links = document.getElementById('links');
