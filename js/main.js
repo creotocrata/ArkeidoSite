@@ -11,7 +11,7 @@ const dict = {
     's3.t':'Desenvolvimento de Software','s3.d':'Aplicações web, desktop e mobile à medida, das ferramentas internas a produtos completos.',
     's4.t':'Web Design','s4.d':'Websites rápidos, elegantes e otimizados, com identidade visual alinhada à sua marca.',
     'port.eyebrow':'Trabalho selecionado','port.title':'Portfólio','port.soon':'Novo projeto em breve','port.visit':'Visitar projeto',
-    'f.all':'Todos','f.arq':'Arquitetura','f.3d':'3D','f.sw':'Software','f.web':'Web','f.ads':'Publicidade & Product Placement',
+    'f.all':'Todos','f.arq':'Arquitetura','f.3d':'3D','f.sw':'Software','f.web':'Web','f.ads':'Publicidade & Colocação de Produtos',
     'proc.eyebrow':'Como trabalhamos','proc.title':'Processo',
     'p1.t':'Conversa','p1.d':'Percebemos objetivos, prazos e orçamento.',
     'p2.t':'Conceito','p2.d':'Esboços, referências e proposta de direção.',
