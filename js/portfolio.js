@@ -143,6 +143,11 @@
     a.hidden = !url; if (url) { a.href = url; a.textContent = t('port.visit') + ' ↗'; }
   }
 
+  // regista no GoatCounter a abertura de um projeto (aparece no painel como "portfolio: <título>")
+  function track(p) {
+    try { if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'portfolio: ' + (p.title || p.id), title: p.title || p.id, event: true }); } catch (e) {}
+  }
+
   function buildItem(p) {
     var art = el('article', 'item');
     art.dataset.cat = p.placeholder ? '' : p.cat; art.dataset.id = p.id;
@@ -161,7 +166,7 @@
     var a = el('a', 'ilink');
     a.href = url || '#contacto';
     if (url && /^https?:|\.html?$|\/$/i.test(url)) { a.target = '_blank'; a.rel = 'noopener'; }
-    a.addEventListener('click', function (e) { if (editing) { e.preventDefault(); return; } if ((p.imgs && p.imgs.length) || (p.videos && p.videos.length)) { e.preventDefault(); openGallery(p); } });
+    a.addEventListener('click', function (e) { if (editing) { e.preventDefault(); return; } track(p); if ((p.imgs && p.imgs.length) || (p.videos && p.videos.length)) { e.preventDefault(); openGallery(p); } });
 
     var pics = gallery(p), vids = videos(p), total = pics.length + vids.length;
     var thumb = el('div', 'thumb t' + (p.grad || 1));
