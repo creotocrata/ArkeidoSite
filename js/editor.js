@@ -466,6 +466,8 @@
   }
   function isUnlocked() { try { return sessionStorage.getItem('arkeido.unlock') === '1'; } catch (e) { return false; } }
   function setUnlocked(v) { try { v ? sessionStorage.setItem('arkeido.unlock', '1') : sessionStorage.removeItem('arkeido.unlock'); } catch (e) {} }
+  // quem desbloqueia o editor é o dono: deixa de contar nas estatísticas (GoatCounter) neste navegador
+  function markOwner() { try { localStorage.setItem('skipgc', 't'); } catch (e) {} }
 
   function askPassword() {
     return new Promise(function (resolve) {
@@ -489,7 +491,7 @@
         var wait = Math.min(fails, 5) * 1000; // abranda tentativas repetidas
         setTimeout(function () {
           check(inp.value).then(function (ok) {
-            if (ok) { fails = 0; setUnlocked(true); finish(true); return; }
+            if (ok) { fails = 0; setUnlocked(true); markOwner(); finish(true); return; }
             fails++; err.textContent = s('lockBad'); err.hidden = false; inp.value = ''; go.disabled = false; inp.focus();
           }).catch(function () { err.textContent = s('lockNo'); err.hidden = false; go.disabled = false; });
         }, wait);
