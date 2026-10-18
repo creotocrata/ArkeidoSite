@@ -24,7 +24,7 @@ const dict = {
     'stat1':'áreas de atuação','stat2':'à medida','stat3':'interlocutor',
     'contact.eyebrow':'Vamos conversar','contact.title':'Tem um projeto em mente?','contact.lead':'Conte-nos a sua ideia. Respondemos em 1–2 dias úteis.',
     'form.name':'Nome','form.email':'Email','form.service':'Serviço','form.msg':'Mensagem','form.send':'Enviar mensagem',
-    'form.err':'Preencha todos os campos corretamente.','form.ok':'A abrir o seu cliente de email…',
+    'form.err':'Preencha todos os campos corretamente.','form.sending':'A enviar…','form.ok':'Mensagem enviada. Obrigado!','form.fail':'Não foi possível enviar. Escreva-nos para geral@arkeido.com.',
     'footer.tag':'Arquitetura · 3D · Software · Web'
   },
   en: {
@@ -52,7 +52,7 @@ const dict = {
     'stat1':'areas of expertise','stat2':'tailor-made','stat3':'point of contact',
     'contact.eyebrow':"Let's talk",'contact.title':'Have a project in mind?','contact.lead':'Tell us your idea. We reply within 1–2 business days.',
     'form.name':'Name','form.email':'Email','form.service':'Service','form.msg':'Message','form.send':'Send message',
-    'form.err':'Please fill in all fields correctly.','form.ok':'Opening your email client…',
+    'form.err':'Please fill in all fields correctly.','form.sending':'Sending…','form.ok':'Message sent. Thank you!','form.fail':'Could not send. Please email us at geral@arkeido.com.',
     'footer.tag':'Architecture · 3D · Software · Web'
   },
   es: {
@@ -80,7 +80,7 @@ const dict = {
     'stat1':'áreas de actuación','stat2':'a medida','stat3':'interlocutor',
     'contact.eyebrow':'Hablemos','contact.title':'¿Tiene un proyecto en mente?','contact.lead':'Cuéntenos su idea. Respondemos en 1–2 días hábiles.',
     'form.name':'Nombre','form.email':'Email','form.service':'Servicio','form.msg':'Mensaje','form.send':'Enviar mensaje',
-    'form.err':'Complete todos los campos correctamente.','form.ok':'Abriendo su cliente de email…',
+    'form.err':'Complete todos los campos correctamente.','form.sending':'Enviando…','form.ok':'Mensaje enviado. ¡Gracias!','form.fail':'No se pudo enviar. Escríbanos a geral@arkeido.com.',
     'footer.tag':'Arquitectura · 3D · Software · Web'
   }
 };
@@ -136,16 +136,31 @@ links.addEventListener('click', e => { if (e.target.tagName === 'A') links.class
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// contact form (mailto until a backend/form service is connected)
+// contact form (sent in the background via FormSubmit)
 const note = document.getElementById('note');
-document.getElementById('form').addEventListener('submit', e => {
+document.getElementById('form').addEventListener('submit', async e => {
   e.preventDefault();
-  const f = e.target, d = Object.fromEntries(new FormData(f));
+  const f = e.target, d = Object.fromEntries(new FormData(f)), btn = f.querySelector('button');
   note.hidden = false;
+  if (d._honey) return;
   if (!d.name.trim() || !/^\S+@\S+\.\S+$/.test(d.email) || !d.message.trim()) { note.textContent = dict[lang]['form.err']; return; }
-  note.textContent = dict[lang]['form.ok'];
-  const body = `${d.message}\n\n— ${d.name} (${d.email})`;
-  location.href = `mailto:geral@arkeido.com?subject=${encodeURIComponent(d.service)}&body=${encodeURIComponent(body)}`;
+  note.textContent = dict[lang]['form.sending'];
+  btn.disabled = true;
+  try {
+    const r = await fetch('https://formsubmit.co/ajax/geral@arkeido.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ name: d.name, email: d.email, service: d.service, message: d.message,
+        _subject: `Arkeido — ${d.service} — ${d.name}`, _replyto: d.email, _template: 'table', _captcha: 'false' })
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || String(j.success) !== 'true') throw new Error(j.message || r.status);
+    note.textContent = dict[lang]['form.ok'];
+    f.reset();
+  } catch (err) {
+    console.error(err);
+    note.textContent = dict[lang]['form.fail'];
+  } finally { btn.disabled = false; }
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
