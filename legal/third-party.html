@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Third-party software and licences — Arkeido</title>
+  <link rel="canonical" href="https://arkeido.com/legal/third-party.html">
+  <meta name="theme-color" content="#0b0c0e">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230b0c0e%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-size=%2720%27 font-family=%27Arial%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23c9a46a%27%3EA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css?v=12">
+</head>
+<body>
+<header class="nav scrolled">
+  <a href="../" class="logo" aria-label="Arkeido">ARKEIDO</a>
+  <a class="doc-back" href="../#software">← Back to site</a>
+</header>
+<main class="container doc">
+<h1>Third-party software and licences</h1>
+<p>Arkeido Cyclops, Arkeido Link and the ArkEngine viewer use the open-source software below. Each is the property of its authors and is licensed under its own terms. Nothing in the Arkeido EULA limits the rights these licences give you.</p>
+<h2>1. Blender and Cycles</h2>
+<ul><li><strong>What:</strong> Blender 5.2 LTS (includes the Cycles renderer, OpenImageDenoise and other libraries).</li><li><strong>How it is used:</strong> Blender is <strong>not included</strong> in the Arkeido extensions. Cyclops runs Blender as a separate program. If you agree, it downloads the official, unmodified build from <a href="https://download.blender.org/release/">https://download.blender.org/release/</a> and checks its SHA-256 checksum. You can also use a Blender you have installed.</li><li><strong>Licence:</strong> Blender is licensed under the GNU General Public License, version 3 or later; Cycles under the Apache License 2.0. Full licence texts and the list of Blender's own third-party libraries are in the <code>license</code> folder of every Blender build and at <a href="https://www.blender.org/about/license/">https://www.blender.org/about/license/</a>.</li><li><strong>Source code:</strong> <a href="https://projects.blender.org/blender/blender">https://projects.blender.org/blender/blender</a></li><li>Blender is a trademark of the Blender Foundation. Arkeido is not affiliated with or endorsed by it.</li></ul>
+<h2>2. Arkeido components licensed under the GPL</h2>
+<p>These parts run inside Blender and are licensed under the **GNU General Public License, version 3 or later** (<a href="https://www.gnu.org/licenses/gpl-3.0.html">https://www.gnu.org/licenses/gpl-3.0.html</a>). Their source code is the Python files themselves, installed with the extension.</p>
+<ul><li><strong>Arkeido Link add-on for Blender</strong> (<code>sketchup_link</code>).</li><li><strong>Cyclops scripts that run inside Blender:</strong> the <code>blender/</code> folder (<code>su_render.py</code>, <code>su_live.py</code>, <code>post_passes.py</code> and the other Python files there) and the <code>ark/bake/</code> folder.</li></ul>
+<p>Copyright © 2026 ARKEIDO, UNIPESSOAL LDA.</p>
+<p>The SketchUp extensions themselves (the Ruby code, the windows and the licensing) run in SketchUp as a separate program and are proprietary software under the Arkeido EULA.</p>
+<h2>3. ArkEngine viewer (WebAssembly)</h2>
+<p>The ArkEngine viewer is written in Rust and compiled to WebAssembly. It includes these crates, all under permissive licences:</p>
+<table><thead><tr><th>Crate(s)</th><th>Licence</th></tr></thead><tbody><tr><td>wgpu, wgpu-core, wgpu-hal, wgpu-types, naga</td><td>MIT OR Apache-2.0</td></tr><tr><td>glam</td><td>MIT OR Apache-2.0</td></tr><tr><td>gltf, gltf-json, gltf-derive</td><td>MIT OR Apache-2.0</td></tr><tr><td>serde, serde_json, serde_derive</td><td>MIT OR Apache-2.0</td></tr><tr><td>wasm-bindgen, wasm-bindgen-futures, js-sys, web-sys</td><td>MIT OR Apache-2.0</td></tr><tr><td>bytemuck, bytemuck_derive</td><td>Zlib OR Apache-2.0 OR MIT</td></tr><tr><td>console_error_panic_hook</td><td>Apache-2.0 / MIT</td></tr><tr><td>foldhash, slotmap</td><td>Zlib</td></tr><tr><td>hexf-parse</td><td>CC0-1.0</td></tr><tr><td>unicode-ident</td><td>(MIT OR Apache-2.0) AND Unicode-3.0</td></tr><tr><td>other dependencies of the above</td><td>MIT, Apache-2.0, MIT OR Apache-2.0, Unlicense OR MIT, ISC</td></tr></tbody></table>
+<p>The complete list, with each crate's copyright notice and licence text, is in <code>THIRD_PARTY_LICENSES_VIEWER.html</code> [TO GENERATE: <code>cargo about generate about.hbs</code> in arkengine/viewer].</p>
+<h2>4. Services used</h2>
+<p>These are services, not software included in the extensions. See PRIVACY.md.</p>
+<ul><li><strong>Lemon Squeezy</strong> — store and License API (<a href="https://www.lemonsqueezy.com">https://www.lemonsqueezy.com</a>).</li><li><strong>Cloudflare</strong> — Workers and R2 for the share service (<a href="https://www.cloudflare.com">https://www.cloudflare.com</a>).</li></ul>
+<h2>5. Trademarks</h2>
+<p>SketchUp and LayOut are trademarks of Trimble Inc. Blender is a trademark of the Blender Foundation. NVIDIA, OptiX and CUDA are trademarks of NVIDIA Corporation. Other names are the property of their owners. Arkeido is not affiliated with or endorsed by any of them.</p>
+</main>
+<footer class="footer">
+  <div class="container">
+    <span>© 2026 ARKEIDO, UNIPESSOAL LDA · NIPC 519614488</span>
+    <nav class="legal-links"><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a><a href="third-party.html">Third-party licences</a></nav>
+  </div>
+</footer>
+</body>
+</html>
