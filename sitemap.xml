@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://arkeido.com/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/terms.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/terms.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/termos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/terminos.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/termos.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/terms.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/termos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/terminos.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/terminos.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/terms.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/termos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/terminos.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/privacy.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/privacidade.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/privacidad.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/privacidade.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/privacidade.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/privacidad.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/privacidad.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/privacidade.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/privacidad.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/refunds.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/refunds.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/reembolsos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/devoluciones.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/reembolsos.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/refunds.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/reembolsos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/devoluciones.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/devoluciones.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/refunds.html"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://arkeido.com/legal/reembolsos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://arkeido.com/legal/devoluciones.html"/>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeido.com/legal/third-party.html</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.2</priority>
+  </url>
+</urlset>
