@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obrigado — Arkeido</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://arkeido.com/obrigado.html">
+  <meta name="theme-color" content="#0b0c0e">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230b0c0e%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-size=%2720%27 font-family=%27Arial%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23c9a46a%27%3EA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=12">
+  <style>
+    .thanks [data-l] { display: none; }
+    .thanks[data-lang="pt"] [data-l="pt"], .thanks[data-lang="en"] [data-l="en"], .thanks[data-lang="es"] [data-l="es"] { display: block; }
+    .thanks ol { line-height: 1.9; }
+  </style>
+</head>
+<body>
+<!-- Página para onde a Polar envia o cliente depois da compra (Success URL dos links de checkout). -->
+<header class="nav scrolled">
+  <a href="./" class="logo" aria-label="Arkeido">ARKEIDO</a>
+  <a class="doc-back" href="./#software">← arkeido.com</a>
+</header>
+<main class="container doc thanks" id="thanks" data-lang="pt">
+  <p class="doc-switch"><a href="#" data-set="pt">Português</a><a href="#" data-set="es">Español</a><a href="#" data-set="en">English</a></p>
+
+  <div data-l="pt">
+    <h1>Obrigado pela sua compra!</h1>
+    <p>Vai receber em breve um email da <strong>Polar</strong> (a nossa revendedora) com o recibo, a sua <strong>chave de licença</strong> e o <strong>instalador</strong>.</p>
+    <ol>
+      <li>Descarregue e execute o instalador.</li>
+      <li>Cole a chave no instalador, ou depois no SketchUp: janela do Cyclops › Licença.</li>
+      <li>A chave dá para <strong>2 computadores</strong>. Para mudar de computador: Licença › Libertar este computador.</li>
+    </ol>
+    <p>A chave, os downloads e as subscrições ficam sempre disponíveis no <a href="https://polar.sh/arkeido/portal">portal de cliente</a>. Dúvidas: <a href="mailto:geral@arkeido.com">geral@arkeido.com</a>.</p>
+  </div>
+
+  <div data-l="es">
+    <h1>¡Gracias por su compra!</h1>
+    <p>En breve recibirá un email de <strong>Polar</strong> (nuestro revendedor) con el recibo, su <strong>clave de licencia</strong> y el <strong>instalador</strong>.</p>
+    <ol>
+      <li>Descargue y ejecute el instalador.</li>
+      <li>Pegue la clave en el instalador, o después en SketchUp: ventana de Cyclops › Licencia.</li>
+      <li>La clave sirve para <strong>2 ordenadores</strong>. Para cambiar de ordenador: Licencia › Liberar este ordenador.</li>
+    </ol>
+    <p>La clave, las descargas y las suscripciones están siempre en el <a href="https://polar.sh/arkeido/portal">portal de cliente</a>. Dudas: <a href="mailto:geral@arkeido.com">geral@arkeido.com</a>.</p>
+  </div>
+
+  <div data-l="en">
+    <h1>Thank you for your purchase!</h1>
+    <p>You will shortly receive an email from <strong>Polar</strong> (our reseller) with the receipt, your <strong>licence key</strong> and the <strong>installer</strong>.</p>
+    <ol>
+      <li>Download and run the installer.</li>
+      <li>Paste the key into the installer, or later in SketchUp: Cyclops window › Licence.</li>
+      <li>The key works on <strong>2 computers</strong>. To move to another computer: Licence › Release this computer.</li>
+    </ol>
+    <p>Your key, downloads and subscriptions are always available in the <a href="https://polar.sh/arkeido/portal">customer portal</a>. Questions: <a href="mailto:geral@arkeido.com">geral@arkeido.com</a>.</p>
+  </div>
+</main>
+<footer class="footer">
+  <div class="container">
+    <span>© 2026 ARKEIDO, UNIPESSOAL LDA · NIPC 519614488</span>
+    <nav class="legal-links"><a href="legal/terms.html">Terms</a><a href="legal/privacy.html">Privacy</a><a href="legal/refunds.html">Refunds</a></nav>
+  </div>
+</footer>
+<script>
+  // língua: ?lang=, a escolhida no site (localStorage), ou a do browser
+  (function () {
+    const box = document.getElementById('thanks');
+    const ok = l => ['pt', 'es', 'en'].includes(l);
+    const set = l => { box.dataset.lang = l; document.documentElement.lang = l;
+      document.querySelectorAll('[data-set]').forEach(a => a.classList.toggle('on', a.dataset.set === l)); };
+    let l = new URLSearchParams(location.search).get('lang');
+    if (!ok(l)) { try { l = localStorage.getItem('lang'); } catch (e) { l = null; } }
+    if (!ok(l)) l = (navigator.language || 'pt').slice(0, 2);
+    set(ok(l) ? l : 'en');
+    document.querySelectorAll('[data-set]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); set(a.dataset.set); }));
+  })();
+</script>
+</body>
+</html>
