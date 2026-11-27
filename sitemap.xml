@@ -7,6 +7,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://arkeido.com/instalar.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://arkeido.com/legal/terms.html</loc>
     <lastmod>2026-11-24</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://arkeido.com/legal/terms.html"/>

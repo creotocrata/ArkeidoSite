@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instalar no Windows — Arkeido</title>
+  <meta name="description" content="Como instalar o Arkeido Cyclops e o Arkeido Link no Windows, e o que fazer quando o Windows mostra o aviso «O Windows protegeu o seu PC».">
+  <link rel="canonical" href="https://arkeido.com/instalar.html">
+  <meta name="theme-color" content="#0b0c0e">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Instalar o Arkeido Cyclops e o Link no Windows">
+  <meta property="og:description" content="O que fazer quando o Windows mostra o aviso «O Windows protegeu o seu PC».">
+  <meta property="og:url" content="https://arkeido.com/instalar.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230b0c0e%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-size=%2720%27 font-family=%27Arial%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23c9a46a%27%3EA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=12">
+  <style>
+    .install [data-l] { display: none; }
+    .install[data-lang="pt"] [data-l="pt"], .install[data-lang="en"] [data-l="en"], .install[data-lang="es"] [data-l="es"] { display: block; }
+    .install ol { line-height: 1.8; }
+    .install .lead { font-size: 1.05rem; color: var(--text); }
+    /* esquema simplificado do aviso (não é uma captura do Windows) */
+    .ss-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0 8px; }
+    .ss { background: #1f4e8c; color: #fff; border-radius: 6px; padding: 18px 18px 16px; font-family: "Segoe UI", system-ui, sans-serif; font-weight: 400; min-height: 210px; display: flex; flex-direction: column; }
+    .ss b { display: block; font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; line-height: 1.25; }
+    .ss p { color: #e6eefa !important; font-size: .82rem !important; margin-bottom: 8px !important; }
+    .ss .ss-more { color: #fff; text-decoration: underline; font-size: .85rem; outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; align-self: flex-start; }
+    .ss .ss-meta { font-size: .78rem; color: #cfdcf0; margin-top: 4px; }
+    .ss .ss-btns { margin-top: auto; display: flex; gap: 8px; justify-content: flex-end; padding-top: 12px; }
+    .ss .ss-btns span { border: 1px solid #fff; padding: 5px 14px; font-size: .8rem; }
+    .ss .ss-btns .hl { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .ss-cap { font-size: .8rem !important; color: var(--muted) !important; }
+    .box { border: 1px solid var(--line); background: var(--bg2); border-radius: 10px; padding: 16px 20px; margin: 18px 0; }
+    .box p:last-child { margin-bottom: 0; }
+    @media (max-width: 640px) { .ss-steps { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<header class="nav scrolled">
+  <a href="./" class="logo" aria-label="Arkeido">ARKEIDO</a>
+  <a class="doc-back" href="./#precos">← arkeido.com</a>
+</header>
+<main class="container doc install" id="install" data-lang="pt">
+  <p class="doc-switch"><a href="#" data-set="pt">Português</a><a href="#" data-set="es">Español</a><a href="#" data-set="en">English</a></p>
+
+  <!-- ═══════════════════════════════ PORTUGUÊS ═══════════════════════════════ -->
+  <div data-l="pt">
+    <h1>Instalar no Windows</h1>
+    <p class="lead">Ao abrir o instalador, o Windows pode mostrar um aviso azul: <strong>«O Windows protegeu o seu PC»</strong>. É normal num programa novo e o instalador é seguro. Veja abaixo como continuar.</p>
+
+    <h2>Antes de começar</h2>
+    <ul>
+      <li><strong>Windows 10 ou 11</strong> (64 bits).</li>
+      <li><strong>SketchUp 2023 ou mais recente.</strong> O instalador instala em todas as versões que encontrar.</li>
+      <li><strong>Arkeido Link:</strong> Blender 4.2 ou mais recente. <strong>Cyclops:</strong> se não tiver o Blender, o instalador oferece-se para o descarregar (versão portátil, só para o Cyclops).</li>
+      <li>Feche o SketchUp antes de instalar.</li>
+    </ul>
+
+    <h2>1. Abrir o instalador</h2>
+    <p>Descarregue o instalador pelo link do email da Polar ou pelo <a href="https://polar.sh/arkeido/portal">portal de cliente</a> e faça duplo clique no ficheiro (por exemplo <code>ArkeidoCyclops-Setup-….exe</code>).</p>
+    <p>Se o browser avisar que o ficheiro «não é transferido com frequência»: no <strong>Edge</strong>, carregue em <strong>⋯ › Manter › Mostrar mais › Manter mesmo assim</strong>; no <strong>Chrome</strong>, em <strong>Manter</strong>.</p>
+
+    <h2>2. Se aparecer «O Windows protegeu o seu PC»</h2>
+    <div class="ss-steps" aria-hidden="true">
+      <div class="ss">
+        <b>O Windows protegeu o seu PC</b>
+        <p>O Microsoft Defender SmartScreen impediu o arranque de uma aplicação não reconhecida…</p>
+        <span class="ss-more">Mais informações</span>
+        <div class="ss-btns"><span>Não executar</span></div>
+      </div>
+      <div class="ss">
+        <b>O Windows protegeu o seu PC</b>
+        <p class="ss-meta">Aplicação: ArkeidoCyclops-Setup-….exe<br>Editor: Editor desconhecido</p>
+        <div class="ss-btns"><span class="hl">Executar mesmo assim</span><span>Não executar</span></div>
+      </div>
+    </div>
+    <p class="ss-cap">Esquema simplificado do aviso. No seu computador o aspeto pode variar um pouco.</p>
+    <ol>
+      <li>Carregue em <strong>Mais informações</strong> (o link por baixo do texto).</li>
+      <li>Aparece o botão <strong>Executar mesmo assim</strong>. Carregue nele.</li>
+      <li>Abre-se a janela de instalação da Arkeido. Siga os passos: aceitar o contrato, colar a chave de licença (se tiver uma) e instalar.</li>
+    </ol>
+
+    <div class="box">
+      <h3>Porque aparece o aviso?</h3>
+      <p>O Windows mostra este aviso a programas que ainda não têm <strong>assinatura digital</strong> nem muitos downloads. Não quer dizer que o programa tenha um vírus. O certificado de assinatura da Arkeido está a ser emitido; quando estiver pronto, o aviso deixa de aparecer e o editor passa a dizer <strong>ARKEIDO, UNIPESSOAL LDA</strong>.</p>
+      <p>Para ter a certeza de que o ficheiro é nosso, descarregue-o <strong>só</strong> pelo email da Polar, pelo portal de cliente ou pelos botões em <a href="./#precos">arkeido.com</a>. Por dentro, as extensões do SketchUp já vêm assinadas pela Trimble.</p>
+    </div>
+
+    <h2>3. Depois de instalar</h2>
+    <ul>
+      <li>Abra o SketchUp: os produtos aparecem no menu <strong>Extensões</strong> (Arkeido Cyclops / Arkeido Link) e na barra de ferramentas.</li>
+      <li>A chave de licença também pode ser colada mais tarde: janela do Cyclops › <strong>Licença</strong>, ou painel do Link › <strong>Licence</strong>.</li>
+    </ul>
+
+    <h2>Problemas?</h2>
+    <ul>
+      <li><strong>Não aparece o botão «Executar mesmo assim»:</strong> a empresa pode ter bloqueado programas não assinados. Peça ao responsável de informática, ou escreva-nos.</li>
+      <li><strong>O antivírus apagou o ficheiro:</strong> é um falso alarme frequente em programas novos. Escreva-nos com o nome do antivírus.</li>
+    </ul>
+    <p>Dúvidas: <a href="mailto:geral@arkeido.com">geral@arkeido.com</a>.</p>
+  </div>
+
+  <!-- ═══════════════════════════════ ESPAÑOL ═══════════════════════════════ -->
+  <div data-l="es">
+    <h1>Instalar en Windows</h1>
+    <p class="lead">Al abrir el instalador, Windows puede mostrar un aviso azul: <strong>«Windows protegió su PC»</strong>. Es normal con un programa nuevo y el instalador es seguro. Vea abajo cómo continuar.</p>
+
+    <h2>Antes de empezar</h2>
+    <ul>
+      <li><strong>Windows 10 u 11</strong> (64 bits).</li>
+      <li><strong>SketchUp 2023 o posterior.</strong> El instalador instala en todas las versiones que encuentre.</li>
+      <li><strong>Arkeido Link:</strong> Blender 4.2 o posterior. <strong>Cyclops:</strong> si no tiene Blender, el instalador se ofrece a descargarlo (versión portátil, solo para Cyclops).</li>
+      <li>Cierre SketchUp antes de instalar.</li>
+    </ul>
+
+    <h2>1. Abrir el instalador</h2>
+    <p>Descargue el instalador desde el enlace del email de Polar o desde el <a href="https://polar.sh/arkeido/portal">portal de cliente</a> y haga doble clic en el archivo (por ejemplo <code>ArkeidoCyclops-Setup-….exe</code>).</p>
+    <p>Si el navegador avisa de que el archivo «no se descarga con frecuencia»: en <strong>Edge</strong>, pulse <strong>⋯ › Conservar › Mostrar más › Conservar de todos modos</strong>; en <strong>Chrome</strong>, <strong>Conservar</strong>.</p>
+
+    <h2>2. Si aparece «Windows protegió su PC»</h2>
+    <div class="ss-steps" aria-hidden="true">
+      <div class="ss">
+        <b>Windows protegió su PC</b>
+        <p>Microsoft Defender SmartScreen impidió el inicio de una aplicación no reconocida…</p>
+        <span class="ss-more">Más información</span>
+        <div class="ss-btns"><span>No ejecutar</span></div>
+      </div>
+      <div class="ss">
+        <b>Windows protegió su PC</b>
+        <p class="ss-meta">Aplicación: ArkeidoCyclops-Setup-….exe<br>Editor: Editor desconocido</p>
+        <div class="ss-btns"><span class="hl">Ejecutar de todas formas</span><span>No ejecutar</span></div>
+      </div>
+    </div>
+    <p class="ss-cap">Esquema simplificado del aviso. En su ordenador puede verse un poco distinto.</p>
+    <ol>
+      <li>Pulse <strong>Más información</strong> (el enlace bajo el texto).</li>
+      <li>Aparece el botón <strong>Ejecutar de todas formas</strong>. Púlselo.</li>
+      <li>Se abre la ventana de instalación de Arkeido. Siga los pasos: aceptar el contrato, pegar la clave de licencia (si tiene una) e instalar.</li>
+    </ol>
+
+    <div class="box">
+      <h3>¿Por qué aparece el aviso?</h3>
+      <p>Windows muestra este aviso con programas que aún no tienen <strong>firma digital</strong> ni muchas descargas. No significa que el programa tenga un virus. El certificado de firma de Arkeido se está emitiendo; cuando esté listo, el aviso dejará de aparecer y el editor será <strong>ARKEIDO, UNIPESSOAL LDA</strong>.</p>
+      <p>Para estar seguro de que el archivo es nuestro, descárguelo <strong>solo</strong> desde el email de Polar, el portal de cliente o los botones de <a href="./#precos">arkeido.com</a>. Por dentro, las extensiones de SketchUp ya vienen firmadas por Trimble.</p>
+    </div>
+
+    <h2>3. Después de instalar</h2>
+    <ul>
+      <li>Abra SketchUp: los productos aparecen en el menú <strong>Extensiones</strong> (Arkeido Cyclops / Arkeido Link) y en la barra de herramientas.</li>
+      <li>La clave de licencia también se puede pegar más tarde: ventana de Cyclops › <strong>Licencia</strong>, o panel de Link › <strong>Licence</strong>.</li>
+    </ul>
+
+    <h2>¿Problemas?</h2>
+    <ul>
+      <li><strong>No aparece el botón «Ejecutar de todas formas»:</strong> su empresa puede haber bloqueado los programas sin firma. Consulte a su responsable de informática o escríbanos.</li>
+      <li><strong>El antivirus borró el archivo:</strong> es una falsa alarma frecuente con programas nuevos. Escríbanos con el nombre del antivirus.</li>
+    </ul>
+    <p>Dudas: <a href="mailto:geral@arkeido.com">geral@arkeido.com</a>.</p>
+  </div>
+
+  <!-- ═══════════════════════════════ ENGLISH ═══════════════════════════════ -->
+  <div data-l="en">
+    <h1>Installing on Windows</h1>
+    <p class="lead">When you open the installer, Windows may show a blue warning: <strong>“Windows protected your PC”</strong>. This is normal for a new program and the installer is safe. Here is how to continue.</p>
+
+    <h2>Before you start</h2>
+    <ul>
+      <li><strong>Windows 10 or 11</strong> (64-bit).</li>
+      <li><strong>SketchUp 2023 or newer.</strong> The installer installs into every version it finds.</li>
+      <li><strong>Arkeido Link:</strong> Blender 4.2 or newer. <strong>Cyclops:</strong> if you don't have Blender, the installer offers to download it (portable version, used only by Cyclops).</li>
+      <li>Close SketchUp before installing.</li>
+    </ul>
+
+    <h2>1. Open the installer</h2>
+    <p>Download the installer from the link in the Polar email or from the <a href="https://polar.sh/arkeido/portal">customer portal</a>, then double-click the file (for example <code>ArkeidoCyclops-Setup-….exe</code>).</p>
+    <p>If your browser says the file “isn't commonly downloaded”: in <strong>Edge</strong>, click <strong>⋯ › Keep › Show more › Keep anyway</strong>; in <strong>Chrome</strong>, click <strong>Keep</strong>.</p>
+
+    <h2>2. If you see “Windows protected your PC”</h2>
+    <div class="ss-steps" aria-hidden="true">
+      <div class="ss">
+        <b>Windows protected your PC</b>
+        <p>Microsoft Defender SmartScreen prevented an unrecognised app from starting…</p>
+        <span class="ss-more">More info</span>
+        <div class="ss-btns"><span>Don't run</span></div>
+      </div>
+      <div class="ss">
+        <b>Windows protected your PC</b>
+        <p class="ss-meta">App: ArkeidoCyclops-Setup-….exe<br>Publisher: Unknown publisher</p>
+        <div class="ss-btns"><span class="hl">Run anyway</span><span>Don't run</span></div>
+      </div>
+    </div>
+    <p class="ss-cap">Simplified sketch of the warning. It may look slightly different on your computer.</p>
+    <ol>
+      <li>Click <strong>More info</strong> (the link below the text).</li>
+      <li>A <strong>Run anyway</strong> button appears. Click it.</li>
+      <li>The Arkeido setup window opens. Follow the steps: accept the agreement, paste your licence key (if you have one) and install.</li>
+    </ol>
+
+    <div class="box">
+      <h3>Why does the warning appear?</h3>
+      <p>Windows shows this warning for programs that don't yet have a <strong>digital signature</strong> or many downloads. It does not mean the program has a virus. Arkeido's code-signing certificate is being issued; once it is ready the warning goes away and the publisher will read <strong>ARKEIDO, UNIPESSOAL LDA</strong>.</p>
+      <p>To be sure the file is ours, download it <strong>only</strong> from the Polar email, the customer portal or the buttons on <a href="./#precos">arkeido.com</a>. Inside, the SketchUp extensions are already signed by Trimble.</p>
+    </div>
+
+    <h2>3. After installing</h2>
+    <ul>
+      <li>Open SketchUp: the products are in the <strong>Extensions</strong> menu (Arkeido Cyclops / Arkeido Link) and on the toolbar.</li>
+      <li>You can also paste the licence key later: Cyclops window › <strong>Licence</strong>, or Link panel › <strong>Licence</strong>.</li>
+    </ul>
+
+    <h2>Problems?</h2>
+    <ul>
+      <li><strong>There is no “Run anyway” button:</strong> your company may block unsigned programs. Ask your IT administrator, or write to us.</li>
+      <li><strong>Your antivirus deleted the file:</strong> a common false alarm with new programs. Write to us with the name of your antivirus.</li>
+    </ul>
+    <p>Questions: <a href="mailto:geral@arkeido.com">geral@arkeido.com</a>.</p>
+  </div>
+</main>
+<footer class="footer">
+  <div class="container">
+    <span>© 2026 ARKEIDO, UNIPESSOAL LDA · NIPC 519614488</span>
+    <nav class="legal-links"><a href="legal/terms.html">Terms</a><a href="legal/privacy.html">Privacy</a><a href="legal/refunds.html">Refunds</a></nav>
+  </div>
+</footer>
+<script>
+  // língua: ?lang=, a escolhida no site (localStorage), ou a do browser
+  (function () {
+    const box = document.getElementById('install');
+    const ok = l => ['pt', 'es', 'en'].includes(l);
+    const set = l => { box.dataset.lang = l; document.documentElement.lang = l;
+      document.querySelectorAll('[data-set]').forEach(a => a.classList.toggle('on', a.dataset.set === l)); };
+    let l = new URLSearchParams(location.search).get('lang');
+    if (!ok(l)) { try { l = localStorage.getItem('lang'); } catch (e) { l = null; } }
+    if (!ok(l)) l = (navigator.language || 'pt').slice(0, 2);
+    set(ok(l) ? l : 'en');
+    document.querySelectorAll('[data-set]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); set(a.dataset.set); }));
+  })();
+</script>
+</body>
+</html>
